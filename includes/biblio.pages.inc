@@ -431,7 +431,9 @@ function biblio_build_query($arg_list) {
           $query->where(" UPPER(substring(bcd.lastname,1,1)) = :letter ", array(':letter' => $value));
           //$where['bc-rank'] = "bc.rank=0";
           if ($sort != 'author') {
-            $query->innerJoin('biblio_contributor', 'bc', 'b.vid = bc.vid');
+            if (array_search('bc', $tables) === FALSE) {
+              $query->innerJoin('biblio_contributor', 'bc', 'n.vid = bc.vid');
+            }
             $query->innerJoin('biblio_contributor_data', 'bcd', 'bc.cid = bcd.cid');
           }
           break;
