@@ -311,6 +311,10 @@ class PARSEENTRIES
     $entry = $this->translate_latex ? $this->searchReplaceText($this->transtab_latex_unicode, $entry, FALSE) : $entry;
     $count = 0;
     $lastLine = FALSE;
+    if (variable_get('biblio_remove_double_bibtex_braces', 0)) {
+      $entry = str_replace('{{', '{', $entry);
+      $entry = str_replace('}}', '}', $entry);
+    }
     if (preg_match("/@(.*)([{(])/U", preg_quote($entry), $matches))
     {
       if (!array_key_exists(1, $matches))
