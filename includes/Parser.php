@@ -165,7 +165,7 @@ class HumanNameParser_Parser {
   */
   private function parse()
   {
-    $suffixes = implode("\.*|", $this->suffixes) . "\.*"; // each suffix gets a "\.*" behind it.
+    $suffixes = implode("\.*|\s", $this->suffixes) . "\.*"; // each suffix gets a "\.*" behind it.
     $prefixes = implode(" |", $this->prefixes) . " "; // each prefix gets a " " behind it.
 
     // The regex use is a bit tricky.  *Everything* matched by the regex will be replaced,
