@@ -123,7 +123,7 @@ function biblio_insert_keywords($node, $update = FALSE) {
   $kw_vocab = variable_get('biblio_keyword_vocabulary', 0);
   $taxo_terms = $typed_keywords = array();
   $freetag_vocab = FALSE;
-  if (!is_array($node->biblio_keywords)) {
+  if (is_set($node->biblio_keywords) && !is_array($node->biblio_keywords)) {
     $typed_keywords = biblio_explode_keywords($node->biblio_keywords);
   }
   else {
