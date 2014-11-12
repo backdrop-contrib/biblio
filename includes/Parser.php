@@ -33,7 +33,7 @@ class HumanNameParser_Parser {
   public function __construct($name = NULL)
   {
     $this->suffixes = array('esq','esquire','jr','sr','2','ii','iii','iv');
-    $this->prefixes = array('bar','ben','bin','da','dal','de la', 'de', 'del','der','di',
+    $this->prefixes = array('bar','ben','bin','da','dal','de la', 'de la Rue du', 'de', 'del','der','di',
         'ibn','la','le','san','st','ste','van', 'van der', 'van den', 'vel','von');
     $this->setName($name);
   }
@@ -171,11 +171,11 @@ class HumanNameParser_Parser {
     // The regex use is a bit tricky.  *Everything* matched by the regex will be replaced,
     //	but you can select a particular parenthesized submatch to be returned.
     //	Also, note that each regex requres that the preceding ones have been run, and matches chopped out.
-    $nicknamesRegex =		"/ ('|\"|\(\"*'*)(.+?)('|\"|\"*'*\)) /"; // names that starts or end w/ an apostrophe break this
-    $suffixRegex =			"/,* *($suffixes)$/";
-    $lastRegex =				"/(?!^)\b([^ ]+ y |$prefixes)*[^ ]+$/";
+    $nicknamesRegex		= "/ ('|\"|\(\"*'*)(.+?)('|\"|\"*'*\)) /"; // names that starts or end w/ an apostrophe break this
+    $suffixRegex			= "/,* *($suffixes)$/";
+    $lastRegex 				= "/(?!^)\b([^ ]+ y |$prefixes)*[^ ]+$/u";
     $leadingInitRegex =	"/^(.\.*)(?= \p{L}{2})/"; // note the lookahead, which isn't returned or replaced
-    $firstRegex =			"/^[^ ]+/"; //
+    $firstRegex				= "/^[^ ]+/"; //
 
     // get nickname, if there is one
     $this->nicknames = $this->name->chopWithRegex($nicknamesRegex, 2);
