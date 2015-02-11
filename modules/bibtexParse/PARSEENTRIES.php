@@ -285,7 +285,23 @@ class PARSEENTRIES
       // Don't remove delimiters now needs to know if the value is a string macro
       // $this->entries[$this->count][strtolower(trim($key))] = trim($this->removeDelimiters(trim($value)));
       $key = strtolower(trim($key));
+
       $value = trim($value);
+
+      // handle curly braces; this needs to be done after the bibtex entry has
+      // been split into parts so it cannot go into the big transtab replacement
+      $decode_arr = array(
+        // throw away any unescaped curly braces
+        // (Zotero adds lots of them, for example)
+        // leave them at the start and the end of the string though
+        '@(.)(?<!\\\\){@' => '$1',
+        '@(?<!\\\\)}(?!$)@' => '',
+        // decode escaped curly braces
+        '@\\\\{@' => '{',
+        '@\\\\}@' => '}',
+      );
+      $value = preg_replace(array_keys($decode_arr), array_values($decode_arr), $value);
+
       $this->entries[$this->count][$key] = $value;
     }
     // echo "**** ";print_r($this->entries[$this->count]);echo "<BR>";
