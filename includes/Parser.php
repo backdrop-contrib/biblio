@@ -177,6 +177,13 @@ class HumanNameParser_Parser {
     $leadingInitRegex =	"/^(.\.*)(?= \p{L}{2})/"; // note the lookahead, which isn't returned or replaced
     $firstRegex				= "/^[^ ]+/"; //
 
+    // short circuit for a simple single string that would otherwise cause an Exception;
+    // we take this as the last name and everything else will be empty (the default)
+    if (preg_match('@^\s*(\p{L}+)\s*$@u', $this->name->getStr(), $matches)) {
+      $this->last = $matches[1];
+      return true;
+    }
+
     // get nickname, if there is one
     $this->nicknames = $this->name->chopWithRegex($nicknamesRegex, 2);
 
