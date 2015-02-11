@@ -559,7 +559,7 @@ function _biblio_filter_info_line($args = array()) {
   $filtercontent = '';
   $search_content = '';
   $base =  variable_get('biblio_base', 'biblio');
-  $session = &$_SESSION['biblio_filter'];
+  $session = !empty($_SESSION['biblio_filter']) ? $_SESSION['biblio_filter'] : array();
   // if there are any filters in place, print them at the top of the list
   $uri = drupal_parse_url(request_uri());
   $uri['path'] = variable_get('biblio_base', 'biblio');
