@@ -561,6 +561,14 @@ function biblio_admin_settings() {
     '#default_value' => variable_get('biblio_index', 0),
     '#description' => t('A biblio node must be indexed for the drupal search to know its content. You need to check this option if you want to search for a biblio node that you just created or updated. Otherwise you must wait for the cron job to reindex nodes.')
   );
+  $form['search']['biblio_search_form_filter'] = array(
+    '#type' => 'checkbox',
+    '#disabled' => $search_disabled,
+    '#title' => t('Allow search filters on search form.'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('biblio_search_form_filter', 1),
+    '#description' => t('Unchecking this box will remove search filters from the search form, but may improve performance on biblio search pages.')
+  );
   $form['sort'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,

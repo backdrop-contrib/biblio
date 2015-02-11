@@ -834,8 +834,10 @@ function biblio_search_form($form, &$form_state) {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         'searchform' => $searchform,
-        'filterform' => biblio_form_filter(),
       );
+  if (variable_get('biblio_search_form_filter', TRUE)) {
+    $form['search_form']['filterform'] = biblio_form_filter();
+  }
 
   return $form;
 }
