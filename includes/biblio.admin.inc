@@ -2213,7 +2213,7 @@ function biblio_admin_author_edit_form($form, &$form_state, $author_id) {
         (isset($merged[$other_author->cid]) && $merged[$other_author->cid] == $author->cid) ||
         in_array($other_author->cid, $form_state['biblio_add_merge_author']))  {
       $candidate = TRUE;
-      $merge_def = ($other_author->alt_form && $other_author->aka) ? $author->cid : FALSE;
+      $merge_def = ($other_author->alt_form && $other_author->aka == $author->cid) ? $author->cid : FALSE;
       $retain_def = $other_author->alt_form ? $author->cid : FALSE;
       $retain_disable = $other_author->alt_form ? TRUE : FALSE;
     }
