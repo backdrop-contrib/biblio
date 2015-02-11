@@ -1156,7 +1156,6 @@ function _biblio_get_authors($filter = NULL) {
               ->fields('bcd', array('lastname', 'firstname', 'initials', 'alt_form'))
               ->groupBy('lastname')
               ->groupBy('firstname')
-              ->groupBy('initials')
               ->groupBy('alt_form')
               ->having('COUNT(*) > 1');
 
