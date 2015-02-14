@@ -248,19 +248,19 @@ class BiblioCrossRefClient
     if (trim($data)) {
       switch ($this->element) {
         case 'surname' :
-          $this->contributors[$this->contrib_count]['lastname'] = $data;
+        	$this->_set_contrib_data('lastname', $data);
           break;
         case 'given_name' :
-          $this->contributors[$this->contrib_count]['firstname'] = $data;
+          $this->_set_contrib_data('firstname', $data);
           break;
         case 'suffix':
-          $this->contributors[$this->contrib_count]['suffix'] = $data;
+        	$this->_set_contrib_data('suffix', $data);
           break;
         case 'affiliation' :
-          $this->contributors[$this->contrib_count]['affiliation'] = $data;
+        	$this->_set_contrib_data('affiliation', $data);
           break;
         case 'organization':
-          $this->contributors[$this->contrib_count]['name'] = $data;
+        	$this->_set_contrib_data('name', $data);
           break;
         case 'year':
         case 'month':
@@ -296,8 +296,17 @@ class BiblioCrossRefClient
       }
     }
   }
+
+  function _set_contrib_data($field, $data) {
+    $this->contributors[$this->contrib_count][$field] = (isset($this->contributors[$this->contrib_count][$field]) ?
+                                                        $this->contributors[$this->contrib_count][$field] . $data :
+                                                        $data);
+  }
+
   function _set_data($field, $data) {
-    $this->node[$field] = (isset($this->node[$field]) ? $this->node[$field] . $data : $data);
+    $this->node[$field] = (isset($this->node[$field]) ?
+                          $this->node[$field] . $data :
+                          $data);
   }
   /*
    * map a unixref XML field to a biblio field
