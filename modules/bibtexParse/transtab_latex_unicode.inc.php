@@ -1,4 +1,4 @@
-
+<?php
 /** @file
  * Copyright:  Matthias Steffens
  *             This code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
