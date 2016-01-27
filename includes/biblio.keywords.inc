@@ -463,7 +463,9 @@ function biblio_create_term_ref($vocabulary) {
       ),
   );
 
-  field_create_field($field);
+  if (!field_info_field($field['field_name'])) {
+     field_create_field($field);
+  }
 
 
   $instance = array(
