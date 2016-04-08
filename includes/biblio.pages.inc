@@ -40,6 +40,7 @@ function biblio_profile_page($user) {
     $arg_list = array(
       'f' => array(
         'author' => $user->data['biblio_contributor_id'],
+        'profile' => TRUE,
       ),
     );
   }
@@ -47,19 +48,22 @@ function biblio_profile_page($user) {
     $arg_list = array(
       'f' => array(
         'author' => $user->data['biblio_lastname'],
+        'profile' => TRUE,
       ),
     );
   }
   else {
     $arg_list = array(
       'f' => array(
-        'uid' => $user->uid
+        'uid' => $user->uid,
+        'profile' => TRUE,
       ),
     );
   }
   $arg_list['page_limit'] = variable_get('biblio_rowsperpage', 25);
 
   list($nids, $extras, $rss_info) = biblio_build_query($arg_list);
+  $render['biblio_page']['header']  = biblio_page_header($arg_list);
 
   $render['biblio_page']['profile'] = biblio_page_content($nids, $extras);
 
@@ -557,7 +561,8 @@ function biblio_build_query($arg_list) {
 function _biblio_filter_info_line($args = array()) {
   $content = '';
   $filtercontent = '';
-  $search_content = '';
+  $search_content = FALSE;
+  $profile_content = FALSE;
   $base =  variable_get('biblio_base', 'biblio');
   $session = !empty($_SESSION['biblio_filter']) ? $_SESSION['biblio_filter'] : array();
   // if there are any filters in place, print them at the top of the list
@@ -569,6 +574,10 @@ function _biblio_filter_info_line($args = array()) {
     foreach ($filters as $type => $value) {
       if ($type == 'search') {
         $search_content = $value;
+        continue;
+      }
+      if ($type == 'profile') {
+        $profile_content = $value;
         continue;
       }
       if ($type == 'term_id') {
@@ -640,7 +649,7 @@ function _biblio_filter_info_line($args = array()) {
     if ($search_content) {
       $content .= '&nbsp;&nbsp;' . l('[' . t('Reset Search') . ']', "$base/filter/clear", $link_options);
     }
-    else {
+    elseif (!$search_content && !$profile_content) {
       $content .= '&nbsp;&nbsp;' . l('[' . t('Clear All Filters') . ']', "$base/filter/clear", $uri);
     }
     $content .= '</div>';
