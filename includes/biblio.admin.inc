@@ -522,7 +522,6 @@ function biblio_admin_settings() {
   if (!module_exists('search')) {
     $search_text = '<div class="admin-dependencies">' . t('Depends on') . ': ' . t('Search') . ' (<span class="admin-disabled">' . t('disabled') . '</span>)</div>';
     $search_disabled = TRUE;
-    variable_set('biblio_footnotes_integration', 0);
   }
   else {
     $search_text = '<div class="admin-dependencies">' . t('Depends on') . ': ' . t('Search') . ' (<span class="admin-enabled">' . t('enabled') . '</span>)</div>';
