@@ -336,6 +336,9 @@ function _biblio_ris_parse_line($tag, $data, $node, &$unmapped) {
       break;
     case 'SP' :
     case 'EP' :
+      if (!isset($node->biblio_pages)) {
+        $node->biblio_pages = '';
+      }
       $node->biblio_pages .= ($tag == "SP") ? $data : " - " . $data;
       break;
     case 'A3' :
@@ -354,6 +357,9 @@ function _biblio_ris_parse_line($tag, $data, $node, &$unmapped) {
       break;
     default :
       if ($field = _biblio_ris_field_map($tag)) {
+        if (!isset($node->$field)) {
+          $node->$field = '';
+        }
         $node->$field .= $data;
       }
       else {

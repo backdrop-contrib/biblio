@@ -267,6 +267,9 @@ function _biblio_bibtex_import($entries, $terms = array(), $batch = FALSE, $sess
     if (!empty($entry['school']))       $node->biblio_publisher       = $entry['school'];
     if (!empty($entry['institution']))  $node->biblio_publisher       = $entry['institution'];
     $node->title                   = (!empty($entry['title'])) ? $entry['title'] : NULL;
+    if (!isset($node->biblio_type_of_work)) {
+      $node->biblio_type_of_work = '';
+    }
     $node->biblio_type_of_work    .= (!empty($entry['type'])) ? $entry['type'] : NULL;
     $node->biblio_edition         = (!empty($entry['edition'])) ? $entry['edition'] : NULL;
     $node->biblio_section         = (!empty($entry['chapter'])) ? $entry['chapter'] : NULL;

@@ -261,6 +261,9 @@ class EndNoteXMLParser {
         case 'dates' :
           switch ($this->dates) {
             case 'year' :
+              if (!isset($this->node->biblio_year)) {
+                $this->node->biblio_year = '';
+              }
               $this->node->biblio_year .= $data;
               break;
           }
@@ -268,6 +271,9 @@ class EndNoteXMLParser {
         case 'date' :
           switch ($this->dates) {
             case 'pub-dates' :
+              if (!isset($this->node->biblio_date)) {
+                $this->node->biblio_date = '';
+              }
               $this->node->biblio_date .= $data;
               break;
             case 'copyright-dates' :
@@ -278,6 +284,9 @@ class EndNoteXMLParser {
         case 'url' :
           switch ($this->urls) {
             case 'web-urls' :
+              if (!isset($this->node->biblio_url)) {
+                $this->node->biblio_url = '';
+              }
               $this->node->biblio_url .= $data;
               break;
             case 'pdf-urls' :
@@ -288,10 +297,16 @@ class EndNoteXMLParser {
           }
           break;
         case 'title':
+          if (!isset($this->node->title)) {
+            $this->node->title = '';
+          }
           $this->node->title .= $data;
           break;
         default:
           if ($field = $this->field_map(trim($this->element))) {
+            if (!isset($this->node->$field)) {
+              $this->node->$field = '';
+            }
             $this->node->$field .= $data;
           }
           else {

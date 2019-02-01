@@ -211,6 +211,9 @@ function _biblio_tagged_import($file, $terms = array(), $batch = FALSE, $session
             'auth_type' => _biblio_get_auth_type(4, $node->biblio_type));
           break;
         case '%X' :
+          if (!isset($node->biblio_abst_e)) {
+            $node->biblio_abst_e = '';
+          }
           $node->biblio_abst_e .= $value;
           break;
         case '%Z' :

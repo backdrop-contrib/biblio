@@ -1586,6 +1586,9 @@ function _biblio_prepare_submit(&$node) {
       $node->$field = $node->{$field}['value'];
     }
     else {
+      if (!isset($node->biblio_formats) || !is_array($node->biblio_formats)) {
+        $node->biblio_formats = array();
+      }
       $node->biblio_formats[$field] = filter_default_format();
     }
   }
