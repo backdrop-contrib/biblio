@@ -153,8 +153,8 @@ function theme_biblio_long($variables) {
   if ($node->biblio_other_number)
     $output .= '<h3>' . t("Other Number") . ':</h3> ' . check_plain($node->biblio_other_number) . "\n";
   if ($node->biblio_url) {
-    $attrib = (variable_get('biblio_links_target_new_window', FALSE)) ? array('target' => '_blank') : array();
-    $output .= '<h3>' . t("URL") . ':</h3>' . l($node->biblio_url, $node->biblio_url, $attrib) . "\n";
+    $options = variable_get('biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
+    $output .= '<h3>' . t("URL") . ':</h3>' . l($node->biblio_url, $node->biblio_url, $options) . "\n";
   }
   if (!empty($node->biblio_keywords)) {
     $output .= '<h3>' . t("Keywords") . ':</h3> ' . _biblio_keyword_links( $node->biblio_keywords) . "\n";
@@ -225,7 +225,7 @@ function theme_biblio_tabular($variables) {
     array('data' => $node->biblio_type_name)
   );
 
-  $attrib = (variable_get('biblio_links_target_new_window', FALSE)) ? array('target' => '_blank') : array();
+  $options = variable_get('biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
 
   $doi = '';
   if (!empty($node->biblio_doi)) {
@@ -233,7 +233,7 @@ function theme_biblio_tabular($variables) {
     if ( ($doi_start = strpos($node->biblio_doi, '10.')) !== FALSE) {
       $doi = substr($node->biblio_doi, $doi_start);
       $doi_url .= 'http://dx.doi.org/' . $doi;
-      $doi = l($doi, $doi_url, $attrib);
+      $doi = l($doi, $doi_url, $options);
     }
 
   }
