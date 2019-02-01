@@ -93,7 +93,8 @@ function theme_biblio_long($variables) {
       $output .= filter_xss($node->$annotation_field, biblio_get_allowed_tags());
       $output .= '</div>';
     }
-    $output .= drupal_render(field_view_field('node', $node, 'body', array('label' => 'hidden')));
+    $full_text = field_view_field('node', $node, 'body', array('label' => 'hidden'));
+    $output .= drupal_render($full_text);
     if (biblio_access('export', $node)) {
       $output .= theme('biblio_export_links', array('node' => $node));
     }
@@ -165,7 +166,8 @@ function theme_biblio_long($variables) {
   if ($node->biblio_notes)
     $output .= '<h3>' . t("Notes") . ': </h3>' . check_markup($node->biblio_notes) . "\n";
   if (!empty($node->body) && user_access('view full text') ) {
-       $output .= drupal_render(field_view_field('node', $node, 'body'));
+    $full_text = field_view_field('node', $node, 'body');
+    $output .= drupal_render($full_text);
   }
 
   return $output;
