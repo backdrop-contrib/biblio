@@ -2171,7 +2171,7 @@ function biblio_update_7019() {
 function biblio_update_7020() {
   $driver = db_driver();
   if ($driver == 'mysql') {
-    db_query('ALTER TABLE `biblio_contributor_data` DROP PRIMARY KEY , ADD PRIMARY KEY ( `cid` )');
+    db_query('ALTER TABLE {biblio_contributor_data} DROP PRIMARY KEY , ADD PRIMARY KEY ( `cid` )');
   }
   if ($driver == 'pgsql') {
     db_drop_primary_key('biblio_contributor_data');
