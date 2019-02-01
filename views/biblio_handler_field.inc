@@ -57,8 +57,8 @@ class biblio_handler_field extends views_handler_field {
 
   function pre_render(&$values) {
     foreach ($values as $result) {
-      if (!empty($result->biblio_biblio_year)) { // this converts values like 9999 or 9998 to "Submitted" and "In Press"
-        $result->biblio_biblio_year = _biblio_text_year($result->biblio_biblio_year);
+      if (!empty($result->node_field_data_field_biblio__biblio_biblio_year)) { // this converts values like 9999 or 9998 to "Submitted" and "In Press"
+        $result->node_field_data_field_biblio__biblio_biblio_year = _biblio_text_year($result->node_field_data_field_biblio__biblio_biblio_year);
       }
     }
     return $values;
