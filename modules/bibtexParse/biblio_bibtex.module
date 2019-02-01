@@ -10,17 +10,17 @@ function biblio_bibtex_views_api() {
   );
 }
 /*
- *   add the BibTex option to the option list of the biblio_import_form
+ *   add the BibTeX option to the option list of the biblio_import_form
  *   the key is the module name use by module_invoke to call hook_biblio_import
  *   module_invoke('biblio_bibtex', 'biblio_import',...)
  */
 function biblio_bibtex_biblio_import_options() {
-  return array('biblio_bibtex' => t('BibTex'));
+  return array('biblio_bibtex' => t('BibTeX'));
 }
 function biblio_bibtex_biblio_mapper_options() {
   return  array(
     'bibtex' => array(
-      'title' => t('BibTex'),
+      'title' => t('BibTeX'),
       'export' => TRUE,
       )
     );
@@ -32,23 +32,23 @@ function biblio_bibtex_form_biblio_node_form_alter(&$form, &$form_state) {
       if (!$form_state['submitted']) {
       $form['biblio_cut_paste'] = array(
         '#type' => 'fieldset',
-        '#title' => t('Paste BibTex Record'),
+        '#title' => t('Paste BibTeX Record'),
         '#weight' => -20,
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       );
       $form['biblio_cut_paste']['paste_data_bibtex'] = array(
         '#type' => 'textarea',
-        '#title' => t('BibTex'),
+        '#title' => t('BibTeX'),
         '#required' => FALSE,
         '#default_value' => isset($form_state['values']['paste_data_bibtex']) ? $form_state['values']['paste_data_bibtex'] : '',
-        '#description' => t('Paste a BibTex entry here'),
+        '#description' => t('Paste a BibTeX entry here'),
         '#size' => 60,
         '#weight' => -4
       );
       $form['biblio_cut_paste']['paste_submit'] = array(
         '#type' => 'submit',
-        '#value' => t('Populate using BibTex'),
+        '#value' => t('Populate using BibTeX'),
         '#submit' => array('biblio_bibtex_form_biblio_node_form_submit')
       );
     }
@@ -83,7 +83,7 @@ function biblio_bibtex_form_biblio_node_form_submit($form, &$form_state) {
 }
 
 function biblio_bibtex_biblio_export_options() {
-  return array('bibtex'  => t('BibTex'));
+  return array('bibtex'  => t('BibTeX'));
 }
 
 function biblio_bibtex_node_view($node, $view_mode) {
@@ -101,11 +101,11 @@ function biblio_bibtex_node_view($node, $view_mode) {
 }
 
 /**
- * Creates a link to export a node (or view) in BibTEX format
+ * Creates a link to export a node (or view) in BibTeX format
  *
  * @param $base this is the base url (defaults to /biblio)
  * @param $nid  the node id, if NULL then the current view is exported
- * @return  a link (<a href=...>BibTEX</a>)
+ * @return  a link (<a href=...>BibTeX</a>)
  */
 function biblio_bibtex_biblio_export_link($nid = NULL, $filter = array()) {
   $show_link = variable_get('biblio_export_links', array('bibtex' => TRUE));
@@ -121,7 +121,7 @@ function biblio_bibtex_biblio_export_link($nid = NULL, $filter = array()) {
   else {
     $link = array(
         'attributes' => array(
-          'title' => t("Click to download the BibTEX formatted file")));
+          'title' => t("Click to download the BibTeX formatted file")));
   }
   $link['attributes'] += array('rel' => 'nofollow');
 
@@ -129,7 +129,7 @@ function biblio_bibtex_biblio_export_link($nid = NULL, $filter = array()) {
   if (!empty($nid)) {
     $link['href'] .= '/' . $nid;
   }
-  $link['title'] = t('BibTex');
+  $link['title'] = t('BibTeX');
 
   if (empty($nid) && !empty($filter)) { // add any filters which may be on the current page
     $link['query'] = $filter;

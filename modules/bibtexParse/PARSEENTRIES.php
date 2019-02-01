@@ -457,7 +457,7 @@ class PARSEENTRIES
 
   // This function extract entries taking into account how comments are defined in BibTeX.
   // BibTeX splits the file in two areas: inside an entry and outside an entry, the delimitation
-  // being indicated by the presence of a @ sign. When this character is met, BibTex expects to
+  // being indicated by the presence of a @ sign. When this character is met, BibTeX expects to
   // find an entry. Before that sign, and after an entry, everything is considered a comment!
   function extractEntries()
   {

@@ -35,7 +35,7 @@ class BiblioImportExportUnitTest extends BiblioImportExportWebTestCase {
     module_load_include('inc', 'biblio_xml', 'endnote8_export');
     $node = $this->createNode();
     $this->assertEqual(_biblio_tagged_export($node), $this->getTaggedString());//, 'Export a node in EndNote Tagged format');
-    $this->assertEqual(_biblio_bibtex_export($node), $this->getBibTexString(), 'Export a node in BibTex format');
+    $this->assertEqual(_biblio_bibtex_export($node), $this->getBibTexString(), 'Export a node in BibTeX format');
     $xml = _endnote8_XML_export('', 'begin');
     $xml .= _endnote8_XML_export($node);
     $xml .= _endnote8_XML_export('', 'end');
@@ -103,7 +103,7 @@ class BiblioImportExportUnitTest extends BiblioImportExportWebTestCase {
     biblio_import($file, 'biblio_bibtex', 1, NULL, FALSE, NULL, $context);
     $nids = $context['results']['nids'];
     array_merge($this->nids, $nids);
-    $this->assertEqual(count($nids), 1, 'Imported 1 Bibtex entry');
+    $this->assertEqual(count($nids), 1, 'Imported 1 BibTeX entry');
     file_delete($file);
     $node = $this->createNode();
     $fields = array_filter(biblio_get_map('field_map', 'bibtex'));

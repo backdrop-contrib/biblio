@@ -125,7 +125,7 @@ function biblio_admin_settings() {
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#title' => t('BibTex settings'),
+    '#title' => t('BibTeX settings'),
     '#group' => 'biblio_settings',
     '#weight' => 20,
     '#description' => ''
@@ -139,10 +139,10 @@ function biblio_admin_settings() {
   );
   $form['bibtex']['biblio_remove_double_bibtex_braces'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Configure the BibTex import parser to replace all double braces with single braces.'),
+    '#title' => t('Configure the BibTeX import parser to replace all double braces with single braces.'),
     '#return_value' => 1,
     '#default_value' => variable_get('biblio_remove_double_bibtex_braces', 0),
-    '#description' => t('<strong>{{</strong> will be replaced with <strong>{</strong> and <strong>}}</strong> will be replaced with <strong>}</strong>. This provides compatibility with importing BibTex from the <a href="http://thomsonreuters.com/web-of-science/">Web of Science</a>. Be aware that this removes support for BibTex "Protected Capitalization".'),
+    '#description' => t('<strong>{{</strong> will be replaced with <strong>{</strong> and <strong>}}</strong> will be replaced with <strong>}</strong>. This provides compatibility with importing BibTeX from the <a href="http://thomsonreuters.com/web-of-science/">Web of Science</a>. Be aware that this removes support for BibTeX "Protected Capitalization".'),
   );
 
   $result = db_query("SELECT b.name, bftd.title FROM {biblio_fields} b
