@@ -252,7 +252,7 @@ function theme_biblio_tabular($variables) {
          $data = _biblio_keyword_links($node->{$row['name']}, $base);
           break;
         case 'biblio_url' :
-          $data = l($node->{$row['name']}, $node->{$row['name']}, $attrib);
+          $data = l($node->{$row['name']}, $node->{$row['name']}, $options);
           break;
         case 'biblio_doi' :
            $data = $doi;
