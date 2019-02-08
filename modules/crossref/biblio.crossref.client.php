@@ -68,7 +68,10 @@ class BiblioCrossRefClient
     $result = drupal_http_request($this->query, $request_options);
 
     if ($result->code != 200) {
-      drupal_set_message(t('HTTP error: !error when trying to contact crossref.org for XML input', array('!error' => $result->code)),'error');
+      drupal_set_message(t('HTTP error: %error (@number) when trying to contact crossref.org for XML input.', array(
+        '%error' => empty($result->error) ? t('unspecified server error') : $result->error,
+        '@number' => $result->code,
+      )), 'error');
       return;
     }
     if (empty($result->data)) {
@@ -77,12 +80,12 @@ class BiblioCrossRefClient
     }
     $sxml = @simplexml_load_string($result->data);
     if (!isset($sxml->doi_record)) {
-    	drupal_set_message(t('Failed to retrieve data for doi ') . $this->doi, 'error');
+      drupal_set_message(t('Failed to retrieve data for doi %doi', array('%doi' => $this->doi)), 'error');
       return;
     }
 
     if ($error = (string)$sxml->doi_record->crossref->error) {
-      drupal_set_message($error,'error');
+      drupal_set_message(t('CrossRef Error: @error', array('@error' => $error)), 'error');
       return;
     }
     $this->nodes = array();
