@@ -1503,10 +1503,13 @@ function biblio_admin_types_form() {
   //$rows[] = array('',t('Fields Common To All Types'),l('edit', 'admin/config/content/biblio/types/edit'),'');
   foreach ($result as $row ) {
     if ($row->tid < 999) {
+      $visibility_link_text = $row->visible ? t('hide') : t('show');
+      $visibility_link_path = 'admin/config/content/biblio/pubtype/' . ($row->visible ? 'hide' : 'show') . '/' . $row->tid;
       $rows[] = array(
         $row->tid,
         check_plain($row->name),
-        ($row->visible) ? l(t('edit'), 'admin/config/content/biblio/fields/' . $row->tid) : '', ($row->visible) ? l(t('hide'), 'admin/config/content/biblio/pubtype/hide/' . $row->tid) : l(t('show'), 'admin/config/content/biblio/pubtype/show/' . $row->tid)
+        $row->visible ? l(t('edit'), 'admin/config/content/biblio/fields/' . $row->tid) : '',
+        l($visibility_link_text, $visibility_link_path),
       );
     }
     else {
