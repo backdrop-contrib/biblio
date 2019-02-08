@@ -1,18 +1,4 @@
 <?php
-/*
- * @file
- * Tests for contributor handling in the Biblio module
- *
- */
-
-class BiblioContributorWebTestCase extends BiblioWebTestCase {
-  function setUp() {
-    parent::setUp('biblio');
-    require_once(drupal_get_path('module', 'biblio') . '/includes/biblio.contributors.inc');
-  }
-
-
-}
 
 class BiblioContributorUnitTest extends BiblioContributorWebTestCase {
 

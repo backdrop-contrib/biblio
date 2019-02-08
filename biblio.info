@@ -5,10 +5,16 @@ dependencies[] = taxonomy
 package = Biblio
 
 configure = admin/config/content/biblio
-files[] = tests/biblio.test
-files[] = tests/keyword.test
-files[] = tests/contributor.test
-files[] = tests/import.export.test
+
+files[] = tests/BiblioContributorUnitTest.test
+files[] = tests/BiblioContributorWebTestCase.test
+files[] = tests/BiblioImportExportUnitTest.test
+files[] = tests/BiblioImportExportWebTestCase.test
+files[] = tests/BiblioKeywordUnitTest.test
+files[] = tests/BiblioKeywordWebTestCase.test
+files[] = tests/BiblioNodeCreationTestCase.test
+files[] = tests/BiblioPageViewTestCase.test
+files[] = tests/BiblioWebTestCase.test
 
 files[] = includes/Name.php
 files[] = includes/Parser.php

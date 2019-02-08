@@ -1,0 +1,8 @@
+<?php
+
+class BiblioImportExportWebTestCase extends BiblioWebTestCase {
+  function setUp() {
+    parent::setUp('biblio', 'biblio_ris', 'biblio_bibtex', 'biblio_tagged', 'biblio_xml', 'biblio_crossref');
+    require_once(drupal_get_path('module', 'biblio') . '/includes/biblio.import.export.inc');
+  }
+}
