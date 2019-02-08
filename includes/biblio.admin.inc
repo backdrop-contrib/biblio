@@ -1505,11 +1505,12 @@ function biblio_admin_types_form() {
     if ($row->tid < 999) {
       $visibility_link_text = $row->visible ? t('hide') : t('show');
       $visibility_link_path = 'admin/config/content/biblio/pubtype/' . ($row->visible ? 'hide' : 'show') . '/' . $row->tid;
+      $visibility_link_options['query']['token'] = drupal_get_token($visibility_link_path);
       $rows[] = array(
         $row->tid,
         check_plain($row->name),
         $row->visible ? l(t('edit'), 'admin/config/content/biblio/fields/' . $row->tid) : '',
-        l($visibility_link_text, $visibility_link_path),
+        l($visibility_link_text, $visibility_link_path, $visibility_link_options),
       );
     }
     else {
@@ -1528,7 +1529,9 @@ function biblio_admin_types_form() {
     )
   );
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
-  $output .= l(t('Reset to defaults'), 'admin/config/content/biblio/pubtype/reset');
+  $output .= l(t('Reset to defaults'), 'admin/config/content/biblio/pubtype/reset', array(
+    'query' => array('token' => drupal_get_token('admin/config/content/biblio/pubtype/reset')),
+  ));
   return $output;
 }
 /**
@@ -1603,6 +1606,10 @@ function biblio_admin_types_add_form_submit($form, &$form_state) {
 }
 
 function biblio_admin_types_reset() {
+  if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], 'admin/config/content/biblio/pubtype/reset')) {
+    return MENU_ACCESS_DENIED;
+  }
+
   module_load_include('install', 'biblio');
 
   db_delete('biblio_types')
@@ -1616,6 +1623,9 @@ function biblio_admin_types_reset() {
 function biblio_admin_types_hide() {
   $args = func_get_args();
   if ($args[0] > 0 && is_numeric($args[0])) {
+    if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], 'admin/config/content/biblio/pubtype/hide/' . $args[0])) {
+      return MENU_ACCESS_DENIED;
+    }
     db_update('biblio_types')
       ->fields(array(
         'visible' => 0))
@@ -1630,6 +1640,9 @@ function biblio_admin_types_hide() {
 function biblio_admin_types_show() {
   $args = func_get_args();
   if ($args[0] > 0 && is_numeric($args[0])) {
+    if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], 'admin/config/content/biblio/pubtype/show/' . $args[0])) {
+      return MENU_ACCESS_DENIED;
+    }
     db_update('biblio_types')
       ->fields(array(
         'visible' => 1))
