@@ -16,10 +16,10 @@ function theme_biblio_openurl($variables) {
   $open_url = $variables['openURL'];
   $openurl_image = variable_get('biblio_openurlimage', '');
   if ($openurl_image != '') {
-    return '<div class="biblio-openurl-image"><a href="' . $open_url . '"target=_blank><img border="0" src="' . $openurl_image . '"/></a></div>';
+    return '<div class="biblio-openurl-image"><a href="' . $open_url . '" target="_blank"><img border="0" src="' . $openurl_image . '"/></a></div>';
   }
   else {
-    return '<div class="biblio-openurl-text"><a href="' . $open_url . '" target=_blank>' . t('Find It Via OpenURL!') . '</a></div>';
+    return '<div class="biblio-openurl-text"><a href="' . $open_url . '" target="_blank">' . t('Find It Via OpenURL!') . '</a></div>';
   }
 }
 
