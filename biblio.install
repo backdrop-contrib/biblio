@@ -1804,11 +1804,10 @@ function biblio_update_6026() {
   // move custom block titles stored in variable "biblio_block_title" to the block table if the title has not already been overriden
   $custom_title = variable_get('biblio_block_title', '');
   if (!empty($custom_title)) {
-    $db_result = db_query("SELECT bid,title FROM {blocks} b where module='biblio' ");
+    $db_result = db_query("SELECT bid,title FROM {block} b where module='biblio' ");
     foreach ($db_result as $block) {
       if (empty ($block->title)) {
-        $block->title = $custom_title;
-        db_query("UPDATE {blocks} SET title='" . $block->title . "' WHERE bid=" . $block->bid);
+        db_query('UPDATE {block} SET title = :title WHERE bid = :bid', array(':title' => $custom_title, ':bid' => $block->bid));
       }
     }
     variable_del('biblio_block_title');
