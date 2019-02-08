@@ -1687,26 +1687,33 @@ function biblio_admin_types_delete_form($form, &$form_state, $tid) {
  * @param unknown_type $form_state
  */
 function biblio_admin_types_delete_form_submit($form, &$form_state) {
-  $query = db_select('biblio_field_type', 'bft');
-  $result = $query->fields('bft', array('ftdid'))
-                  ->condition('tid', $form_state['values']['tid'])
-                  ->condition('ftdid', 100, '>')
-                  ->execute();
-  foreach ($result as $field) {
-    $ftdids[] = $field->ftdid;
+  if (!empty($form_state['values']['tid'])) {
+    $ftdids = array();
+    $query = db_select('biblio_field_type', 'bft');
+    $result = $query->fields('bft', array('ftdid'))
+                    ->condition('tid', $form_state['values']['tid'])
+                    ->condition('ftdid', 100, '>')
+                    ->execute();
+    foreach ($result as $field) {
+      $ftdids[] = $field->ftdid;
+    }
+
+    if (!empty($ftdids)) {
+      db_delete('biblio_field_type_data')
+        ->condition('ftdid', $ftdids, 'IN')
+        ->execute();
+    }
+
+    db_delete('biblio_types')
+      ->condition('tid', $form_state['values']['tid'])
+      ->execute();
+
+    db_delete('biblio_field_type')
+      ->condition('tid', $form_state['values']['tid'])
+      ->execute();
+
+    drupal_set_message(t('Publication type has been deleted.'));
   }
-
-  db_delete('biblio_field_type_data')
-    ->condition('ftdid', $ftdids, 'IN')
-    ->execute();
-
-  db_delete('biblio_types')
-    ->condition('tid', $form_state['values']['tid'])
-    ->execute();
-
-  db_delete('biblio_field_type')
-    ->condition('tid', $form_state['values']['tid'])
-    ->execute();
 
   $form_state['redirect'] = 'admin/config/content/biblio/pubtype';
 }
