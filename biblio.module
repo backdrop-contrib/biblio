@@ -1989,7 +1989,7 @@ function _biblio_inline_filter_replace_callback($matches) {
 
 function _biblio_filter_footnote_callback($matches, $square_brackets = FALSE) {
   if ($square_brackets)  {
-    $text = '[fn]' . _biblio_citekey_print($matches[1]) . "</fn>";
+    $text = '[fn]' . _biblio_citekey_print($matches[1]) . "[/fn]";
   }
   else {
     $text = '<fn>' . _biblio_citekey_print($matches[1]) . "</fn>";
