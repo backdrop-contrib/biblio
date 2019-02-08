@@ -203,7 +203,7 @@ class PARSECREATORS
     $appellation = $prefix = $surname = $firstname = $initials = '';
     $this->prefix = array();
     $author = explode(",", preg_replace("/\s{2,}/", ' ', trim($value)));
-    $size = sizeof($author);
+    $size = count($author);
 // No commas therefore something like Mark Grimshaw, Mark Nicholas Grimshaw, M N Grimshaw, Mark N. Grimshaw
     if ($size == 1)
     {

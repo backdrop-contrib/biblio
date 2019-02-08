@@ -1,49 +1,70 @@
 <?php
 
+/**
+ *
+ */
 class BiblioWebTestCase extends DrupalWebTestCase {
-  protected $kids = array();  //keep a list of all keyword id's created
-  protected $cids = array();  //keep a list of all contributor id's created
-  protected $nids = array();  //keep a list of all node id's created
+  /**
+   * Keep a list of all keyword id's created.
+   */
+  protected $kids = array();
+
+  /**
+   * Keep a list of all contributor id's created.
+   */
+  protected $cids = array();
+
+  /**
+   * Keep a list of all node id's created.
+   */
+  protected $nids = array();
   protected $admin_user;
 
-//  function tearDown() {
-//    if (!empty($this->kids)) {
-//      db_delete('biblio_keyword')
-//      ->condition('kid', $this->kids, 'IN')
-//      ->execute();
-//
-//      db_delete('biblio_keyword_data')
-//      ->condition('kid', $this->kids, 'IN')
-//      ->execute();
-//
-//    }
-//
-//    foreach ($this->nids as $nid) {
-//      node_delete($nid);
-//    }
-//
-//    if (!empty($this->cids)) {
-//      db_delete('biblio_contributor')
-//      ->condition('cid', $this->cids, 'IN')
-//      ->execute();
-//
-//      db_delete('biblio_contributor_data')
-//      ->condition('cid', $this->cids, 'IN')
-//      ->execute();
-//
-//    }
-//    $this->cids = array();
-//  }
+  // @code
+  // function tearDown() {
+  //    if (!empty($this->kids)) {
+  //      db_delete('biblio_keyword')
+  //      ->condition('kid', $this->kids, 'IN')
+  //      ->execute();
+  //
+  //      db_delete('biblio_keyword_data')
+  //      ->condition('kid', $this->kids, 'IN')
+  //      ->execute();
+  //
+  //    }
+  //
+  //    foreach ($this->nids as $nid) {
+  //      node_delete($nid);
+  //    }
+  //
+  //    if (!empty($this->cids)) {
+  //      db_delete('biblio_contributor')
+  //      ->condition('cid', $this->cids, 'IN')
+  //      ->execute();
+  //
+  //      db_delete('biblio_contributor_data')
+  //      ->condition('cid', $this->cids, 'IN')
+  //      ->execute();
+  //
+  //    }
+  //    $this->cids = array();
+  // }
+  // @endcode
 
-
-  function createNode($type = 100) {
+  /**
+   *
+   */
+  public function createNode($type = 100) {
     $schema = drupal_get_schema('biblio');
     foreach ($schema['fields'] as $name => $values) {
-      if ($values['type'] == 'int') continue;
+      if ($values['type'] == 'int') {
+        continue;
+      }
       switch ($values['type']) {
         case 'varchar':
           $length = $values['length'];
           break;
+
         case 'text':
           $length = 1000;
           break;
@@ -52,13 +73,17 @@ class BiblioWebTestCase extends DrupalWebTestCase {
     }
     $settings = array(
       'title' => 'Biblio Title',
-      'type' => 'biblio', // This replaces the default type
-      'biblio_type' => $type, // This appends a new field.
+      // This replaces the default type.
+      'type' => 'biblio',
+      // This appends a new field.
+      'biblio_type' => $type,
       'biblio_year' => 2009,
-      'biblio_contributors' => array(0 => array('name' => 'Ron J. Jeromezzzzzz',  'auth_type' => 1, 'auth_category' => 1),
-                                     1 => array('name' => 'John Smithzzzzzz',  'auth_type' => 1, 'auth_category' => 1),
-                                     2 => array('name' => 'George W. Bushzzzzzz',  'auth_type' => 1, 'auth_category' => 1)),
-      'biblio_keywords' => array('biblio_keywords')
+      'biblio_contributors' => array(
+        0 => array('name' => 'Ron J. Jeromezzzzzz', 'auth_type' => 1, 'auth_category' => 1),
+        1 => array('name' => 'John Smithzzzzzz', 'auth_type' => 1, 'auth_category' => 1),
+        2 => array('name' => 'George W. Bushzzzzzz', 'auth_type' => 1, 'auth_category' => 1),
+      ),
+      'biblio_keywords' => array('biblio_keywords'),
     );
     $settings = array_merge($biblio_fields, $settings);
 
@@ -73,7 +98,11 @@ class BiblioWebTestCase extends DrupalWebTestCase {
     return $node;
 
   }
-  function assertBiblioFields($node1, $node2, $fields = array()) {
+
+  /**
+   *
+   */
+  public function assertBiblioFields($node1, $node2, $fields = array()) {
     $count = 0;
     foreach ($fields as $field) {
       if ($field == 'biblio_contributors') {
@@ -93,4 +122,5 @@ class BiblioWebTestCase extends DrupalWebTestCase {
     }
     $this->assertEqual($count, 0, "There were $count differences between the two nodes");
   }
+
 }

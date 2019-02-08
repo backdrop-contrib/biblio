@@ -1,6 +1,13 @@
 <?php
 
+/**
+ *
+ */
 class BiblioNodeCreationTestCase extends DrupalWebTestCase {
+
+  /**
+   *
+   */
   public static function getInfo() {
     return array(
       'name' => 'Biblio node creation',
@@ -9,7 +16,10 @@ class BiblioNodeCreationTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   *
+   */
+  public function setUp() {
     parent::setUp('biblio');
     $web_user = $this->drupalCreateUser(array('create biblio content'));
     $this->drupalLogin($web_user);
@@ -18,7 +28,7 @@ class BiblioNodeCreationTestCase extends DrupalWebTestCase {
   /**
    * Create a biblio node and verify its consistency in the database.
    */
-  function testBiblioNodeCreation() {
+  public function testBiblioNodeCreation() {
     // Create a node.
     $edit = array();
     $edit["biblio_type"] = '101';
@@ -48,4 +58,5 @@ class BiblioNodeCreationTestCase extends DrupalWebTestCase {
     $this->assertIdentical($keywordstring, 'architecture, building, wood', t('Keywords are present on the biblio node.'));
     $this->assertTrue($node, t('Node found in database.'));
   }
+
 }
