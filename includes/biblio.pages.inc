@@ -518,7 +518,7 @@ function biblio_build_query($arg_list) {
             // by word characters. A word character is an alphanumeric character
             // in the alnum class or an underscore (_).
             // https://dev.mysql.com/doc/refman/5.7/en/regexp.html
-            $query->condition('bcd.name', "[[:<:]]" . $value . "[[:>:]]", $match_op);
+            $query->condition('bcd.name', "[[:<:]]" . preg_quote($value) . "[[:>:]]", $match_op);
             $rss_info['title'] = t("Publications by @value", array('@value' => $value));
             $rss_info['description'] = t("These publications by %author are part of the works listed at %sitename", array('%author' => $value, '%sitename' => variable_get('site_name', 'Drupal')));
             $rss_info['link'] = '/author/' . $value;
@@ -526,7 +526,7 @@ function biblio_build_query($arg_list) {
           break;
 
         case 'publisher':
-          $query->condition('b.biblio_publisher', "[[:<:]]" . $value . "[[:>:]]", $match_op);
+          $query->condition('b.biblio_publisher', "[[:<:]]" . preg_quote($value) . "[[:>:]]", $match_op);
           break;
 
         case 'year':
@@ -555,7 +555,7 @@ function biblio_build_query($arg_list) {
               $query->where(" UPPER(substring(bkd.word,1,1)) = :letter ", array(':letter' => $value));
             }
             else {
-              $query->condition('bkd.word', "[[:<:]]" . $value . "[[:>:]]", 'LIKE');
+              $query->condition('bkd.word', "[[:<:]]" . preg_quote($value) . "[[:>:]]", 'LIKE');
             }
             $rss_info['title'] = t("Keyword @value", array('@value' => $value));
             $rss_info['description'] = t("These publications, containing the keyword: %keyword, are part of the works listed at %sitename", array('%keyword' => $value, '%sitename' => variable_get('site_name', 'Drupal')));
