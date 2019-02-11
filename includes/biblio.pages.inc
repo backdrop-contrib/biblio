@@ -511,6 +511,13 @@ function biblio_build_query($arg_list) {
             if (array_search('bcd', $tables) === FALSE) {
               $query->innerJoin('biblio_contributor_data', 'bcd', 'bcd.cid = bc.cid');
             }
+
+            // [[:<:]], [[:>:]] These markers stand for word boundaries. They
+            // match the beginning and end of words, respectively. A word is a
+            // sequence of word characters that is not preceded by or followed
+            // by word characters. A word character is an alphanumeric character
+            // in the alnum class or an underscore (_).
+            // https://dev.mysql.com/doc/refman/5.7/en/regexp.html
             $query->condition('bcd.name', "[[:<:]]" . $value . "[[:>:]]", $match_op);
             $rss_info['title'] = t("Publications by @value", array('@value' => $value));
             $rss_info['description'] = t("These publications by %author are part of the works listed at %sitename", array('%author' => $value, '%sitename' => variable_get('site_name', 'Drupal')));

@@ -29,6 +29,7 @@ class Creators extends PARSECREATORS
     }
   function getCreatorByName($name)
   {
+    // [[:<:]], [[:>:]] These stand for word boundaries; see biblio.pages.inc.
     $result = db_query('SELECT *
                     FROM {biblio_contributor_data}
                     WHERE lastname RLIKE "[[:<:]]%s[[:>:]]" ', $name);
