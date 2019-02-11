@@ -548,7 +548,7 @@ function biblio_build_query($arg_list) {
               $query->where(" UPPER(substring(bkd.word,1,1)) = :letter ", array(':letter' => $value));
             }
             else {
-              $query->condition('bkd.word', "[[:<:]]" . $value . "[:>:]]", 'LIKE');
+              $query->condition('bkd.word', "[[:<:]]" . $value . "[[:>:]]", 'LIKE');
             }
             $rss_info['title'] = t("Keyword @value", array('@value' => $value));
             $rss_info['description'] = t("These publications, containing the keyword: %keyword, are part of the works listed at %sitename", array('%keyword' => $value, '%sitename' => variable_get('site_name', 'Drupal')));
