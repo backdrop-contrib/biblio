@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file biblio_pm.admin.inc
+ * @file
  */
 
 /**

@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @file EntrezPubmedArticle.php
+ * @file
  * Provides a class for handling PubMed articles retrieved with EFetch.
+ *
  * Orginally writen by Stefan Freudenberg.
  */
 

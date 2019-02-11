@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @file EntrezClient.php
- * Provides Entrez client to retrieve items from the NCBI databases
+ * @file
+ * Provides Entrez client to retrieve items from the NCBI databases.
+ *
  * Orginally writen by Stefan Freudenberg.
  */
 
