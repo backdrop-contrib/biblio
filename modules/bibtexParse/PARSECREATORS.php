@@ -45,7 +45,7 @@ class Creators extends PARSECREATORS {
     // [[:<:]], [[:>:]] These stand for word boundaries; see biblio.pages.inc.
     $result = db_query('SELECT *
                     FROM {biblio_contributor_data}
-                    WHERE lastname RLIKE :lastname', array('lastname' => '[[:<:]]' . preg_quote($value) . '[[:>:]]'));
+                    WHERE lastname RLIKE :lastname', array('lastname' => '[[:<:]]' . preg_quote($name) . '[[:>:]]'));
   }
 
   /**
