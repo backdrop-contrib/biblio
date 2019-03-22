@@ -383,7 +383,7 @@ function _biblio_bibtex_export($node) {
 
   $bibtex = '';
   $type = "article";
-  $journal = $series = $booktitle = $school = $organization = $institution = NULL;
+  $journal = $series = $booktitle = $school = $organization = $institution = $howpublished = NULL;
   $type = _biblio_bibtex_type_map($node->biblio_type);
   switch ($node->biblio_type) {
     case 100:
@@ -412,8 +412,11 @@ function _biblio_bibtex_export($node) {
       break;
 
     case 102:
-    default:
       $journal = $node->biblio_secondary_title;
+      break;
+
+    case 129:
+      $howpublished = $node->biblio_secondary_title;
       break;
   }
 
@@ -421,6 +424,7 @@ function _biblio_bibtex_export($node) {
   $bibtex .= ($node->biblio_citekey) ? $node->biblio_citekey : "";
   $bibtex .= _biblio_bibtex_format_entry('title', $node->title);
   $bibtex .= _biblio_bibtex_format_entry('journal', $journal);
+  $bibtex .= _biblio_bibtex_format_entry('howpublished', $howpublished);
   $bibtex .= _biblio_bibtex_format_entry('booktitle', $booktitle);
   $bibtex .= _biblio_bibtex_format_entry('series', $series);
   $bibtex .= _biblio_bibtex_format_entry('volume', $node->biblio_volume);
