@@ -2,7 +2,6 @@
                            biblio.module
 
 Author:  Ron Jerome
-Released under the GPL
 
 
 Description:
