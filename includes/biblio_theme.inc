@@ -795,7 +795,7 @@ function theme_biblio_style($variables) {
 
   $style_function = "biblio_style_$style_name";
   if (function_exists($style_function)) {
-    $styled_node = $style_function ($node);
+    $styled_node = $style_function($node);
   }
   else {
     drupal_set_message(t('The style function: @funct does not exist', array('@funct' => $style_function)), 'error');
