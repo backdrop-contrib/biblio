@@ -21,13 +21,9 @@ Drupal 7.x. Upgrades are supported from any Biblio version after 6.x-1.9.
 
 ## Installation
 
-Create a directory called biblio in the `sites/all/modules` directory, then
-place all of the files packaged with this module in that directory.
-
-This module will auto-install the required database tables the first time you
-enable it on the admin/modules page. This will also setup a number of
-pre-defined publication types. These types can be changed or deleted on the
-`admin/config/content/biblio/types` page.
+This module is installed like any other Drupal module. On intallation, this
+module will setup several pre-defined publication types. These types can be
+changed or deleted on the `admin/config/content/biblio/types` page.
 
 ## robots.txt
 
