@@ -116,14 +116,3 @@ function biblio_style_ieee($node) {
 
   return filter_xss($output, biblio_get_allowed_tags());
 }
-
-/**
- *
- */
-function _ieee_format_author($author) {
-  $format = $author['prefix'];
-  $format .= !empty($format) ? ' ' . $author['lastname'] . ' ' : $author['lastname'] . ' ';
-  $format .= !empty($author['firstname']) ? drupal_substr($author['firstname'], 0, 1) . '.' : '';
-  $format .= !empty($author['initials']) ? $author['initials'] . '.' : '';
-  return $format;
-}
