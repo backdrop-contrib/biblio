@@ -90,7 +90,7 @@ function biblio_style_ieee($node) {
       else {
         $output .= '<span class="biblio-title"><i>';
         $output .= l($node->title, $url['link'], $url['options']);
-        $output .= ", </i></span> \n";
+        $output .= "</i></span>";
       }
       if (!empty($node->biblio_edition)) {
         $output .= ', ' . check_plain($node->biblio_edition);
