@@ -74,7 +74,7 @@ function biblio_style_ieee($node) {
     $output .= '[' . check_plain($node->biblio_citekey) . '] ';
   }
 
-  $output .= isset($authors) ? '<span class="biblio-authors">' . $authors . ", </span> \n" : '';
+  $output .= isset($authors) ? '<span class="biblio-authors">' . $authors . "</span>, " : '';
   switch ($node->biblio_type) {
     default:
       $url = biblio_get_title_url_info($node);
@@ -84,7 +84,7 @@ function biblio_style_ieee($node) {
         // @code
         // $output .= $inline ? l("$node->title", "$base/viewinline/$node->nid") : l("$node->title", "node/$node->nid");
         // @endcode
-        $output .= "&quot;, </span> \n";
+        $output .= "&quot;</span>, ";
         $output .= '<i>' . check_plain($node->biblio_secondary_title) . '</i>';
       }
       else {
