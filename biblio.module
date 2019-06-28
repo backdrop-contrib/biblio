@@ -1350,7 +1350,10 @@ function biblio_form($node, &$form_state) {
         '#title' => check_plain($fld['title']),
         '#size' => $fld['size'],
         '#rows' => 10,
-      // '#required' => $fld['required'],.
+        // @see https://www.drupal.org/project/biblio/issues/3054506
+        // @code
+        // '#required' => $fld['required'],
+        // @endcode
         '#maxlength' => $fld['maxsize'],
         '#weight' => $fld['weight'] / 10,
         '#autocomplete_path' => ($fld['autocomplete']) ? 'biblio/autocomplete/' . $fld['name'] : '',
