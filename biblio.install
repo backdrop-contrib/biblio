@@ -54,7 +54,7 @@ function biblio_install() {
  *
  */
 function biblio_enable() {
-  // TODO taxonomy
+  // @todo taxonomy.
   // if (module_exists('taxonomy')) _enable_biblio_vocabularies();
   _set_system_weight();
   // _enable_biblio_collection_vocabulary();
@@ -80,7 +80,7 @@ function _enable_biblio_vocabularies() {
  */
 function biblio_disable() {
   $vids = array();
-  // TODO taxonomy
+  // @todo taxonomy.
   /*
   if (module_exists('taxonomy')) {
   $voc = taxonomy_get_vocabularies();
@@ -176,7 +176,7 @@ function biblio_batch_uninstall(&$context) {
  */
 function biblio_batch_uninstall_finished($success, $results, $operations) {
   if ($success) {
-    // TODO taxonomy
+    // @todo taxonomy.
     /*
     if (module_exists('taxonomy')) {
     $voc = taxonomy_get_vocabularies();
@@ -259,7 +259,7 @@ function _set_system_weight() {
  */
 function _enable_biblio_keyword_vocabulary() {
 
-  // TODO taxonomy
+  // @todo taxonomy.
   /*
   if ($vocabulary = taxonomy_vocabulary_load(variable_get('biblio_keyword_vocabulary', 0))) {
   // Existing install. Add back forum node type, if the biblio
@@ -279,7 +279,7 @@ function _enable_biblio_keyword_vocabulary() {
  *
  */
 function _enable_biblio_collection_vocabulary() {
-  // TODO taxonomy
+  // @todo taxonomy.
   /*
   if ($vocabulary = taxonomy_vocabulary_load(variable_get('biblio_collection_vocabulary', 0))) {
   // Existing install. Add back forum node type, if the biblio
@@ -329,7 +329,7 @@ function _enable_biblio_collection_vocabulary() {
  * @return none
  */
 function _add_biblio_keywords() {
-  // TODO taxonomy
+  // @todo taxonomy.
   /*
   set_time_limit(300);
   $kw_sep = variable_get('biblio_keyword_sep', ',');

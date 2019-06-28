@@ -64,8 +64,11 @@ function biblio_openurl($node) {
 }
 
 /**
- * DEPRECIATED! this was the original output format which is not to flexable it will be removed
- * TODO: remove this function.
+ * Theme function for biblio_long.
+ *
+ * @deprecated This was the original output format which is not to flexable. It
+ * will be removed.
+ * @todo: Remove this function.
  *
  * @param $node
  * @param $base
@@ -688,13 +691,13 @@ function theme_biblio_author_link($variables) {
  * - single-page items are given as a page range with identical start & end numbers (e.g. "127-127")
  * - multi-page items are given as a page range where the end number is greater than the start number (e.g. "127-132")
  * - for multi-page items where only the start page is known, a hyphen is appended to the start page (e.g. "127-")
- * - total number of pages are given with a "pp" suffix (e.g. "498 pp"), see TODO
+ * - total number of pages are given with a "pp" suffix (e.g. "498 pp"), see todo.
  * - the given page info is left as is if it does not match any of the above rules (e.g. a single page number is ambiguous since it
  * could mean a single page or the total number of pages)
  * - the function attempts to deal with page locators that contain letters (e.g. "A1 - A3" or "4a-4c") but, ATM, locator parts (e.g. "A1")
  * must contain at least one digit character & must not contain any whitespace.
  *
- * TODO:  - should we only use Unicode-aware regex expressions (i.e. always use '$space', '$digit' or '$word' instead of ' ', '\d' or '\w', etc)?
+ * @todo: - should we only use Unicode-aware regex expressions (i.e. always use '$space', '$digit' or '$word' instead of ' ', '\d' or '\w', etc)?
  * - recognize & process total number of pages
  * - for '$shortenPageRangeEnd=TRUE', add support for page locators that contain letters (e.g. "A1 - A3" or "4a-4c")
  */
@@ -1197,7 +1200,7 @@ function theme_biblio_alpha_line($variables) {
     default:
   }
   $output = '<div class="biblio-alpha-line">';
-  // TODO   for Cyrillic use 1040 to 1071... e.g. &#1068;.
+  // @todo   for Cyrillic use 1040 to 1071... e.g. &#1068;.
   for ($i = 65; $i <= 90; $i++) {
     if ($i == ord($current)) {
       $output .= '<b>[' . chr($i) . ']</b>&nbsp;';
@@ -1401,5 +1404,4 @@ function _biblio_sort_tab($tab, $tabs = FALSE) {
   else {
     return $tab['pfx'] . l($tab['text'], $tab['path'], $tab) . $tab['arrow'] . $tab['sfx'];
   }
-  return;
 }
