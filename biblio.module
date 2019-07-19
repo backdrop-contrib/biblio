@@ -1350,16 +1350,18 @@ function biblio_form($node, &$form_state) {
         '#title' => check_plain($fld['title']),
         '#size' => $fld['size'],
         '#rows' => 10,
-        // @see https://www.drupal.org/project/biblio/issues/3054506
-        // @code
-        // '#required' => $fld['required'],
-        // @endcode
         '#maxlength' => $fld['maxsize'],
         '#weight' => $fld['weight'] / 10,
         '#autocomplete_path' => ($fld['autocomplete']) ? 'biblio/autocomplete/' . $fld['name'] : '',
         '#description' => check_plain($fld['hint']),
         '#format' => isset($node->biblio_formats[$key]) ? $node->biblio_formats[$key] : filter_default_format(),
       );
+      // The required marker must be added manually. If #required is set, the
+      // validation error message will not indicate which tab the element is
+      // under. Instead biblio_node_form_validate() sets a custom error message.
+      if ($fld['required']) {
+        $element['#title'] .= ' ' . theme('form_required_marker');
+      }
 
       if ($key == 'biblio_refereed') {
         $element['#options'] = array(
