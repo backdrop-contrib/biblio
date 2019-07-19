@@ -1,12 +1,12 @@
 <?php
 
 /**
- *
+ * Test biblio node creation.
  */
 class BiblioNodeCreationTestCase extends DrupalWebTestCase {
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function getInfo() {
     return array(
@@ -17,7 +17,7 @@ class BiblioNodeCreationTestCase extends DrupalWebTestCase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function setUp() {
     parent::setUp('biblio');
