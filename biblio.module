@@ -1639,7 +1639,7 @@ function biblio_node_form_validate($form, &$form_state) {
     foreach ($form_state['biblio_fields'] as $key => $fld) {
       if ($fld['required'] && isset($form_state['values'][$key]) && empty($form_state['values'][$key])) {
         $tab = $tabs[$fld['vtab']];
-        form_set_error($key, t('The <b><u>@fld</u></b> field (on the <b><i>@tab</i></b> tab) is required', array('@fld' => $fld['title'], '@tab' => $tab)));
+        form_set_error($key, t('@fld field is required (on the %tab tab).', array('@fld' => $fld['title'], '%tab' => $tab)));
       }
     }
   }
