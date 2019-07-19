@@ -220,6 +220,9 @@ function theme_biblio_tabular($variables) {
   $base = $variables['base'];
   static $citeproc;
 
+  $node->biblio_type = isset($node->biblio_type) ? $node->biblio_type : NULL;
+  $node->biblio_type_name = isset($node->biblio_type_name) ? $node->biblio_type_name : NULL;
+
   if (module_exists('popups')) {
     popups_add_popups();
   }
@@ -312,6 +315,8 @@ function theme_biblio_tabular($variables) {
   }
   // Let other modules add rows if desired...
   drupal_alter('biblio_node_table_rows', $rows, $node);
+
+  $node->biblio_coins = isset($node->biblio_coins) ? $node->biblio_coins : biblio_coins($node);
 
   $output = '<div id="biblio-node">';
   $output .= filter_xss($node->biblio_coins, array('span'));
