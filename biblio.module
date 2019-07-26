@@ -150,8 +150,9 @@ function biblio_init() {
  *
  */
 function biblio_cron() {
-  require_once drupal_get_path('module', 'biblio') . '/includes/biblio.contributors.inc';
-  require_once drupal_get_path('module', 'biblio') . '/includes/biblio.keywords.inc';
+  $path = drupal_get_path('module', 'biblio');
+  require_once $path . '/includes/biblio.contributors.inc';
+  require_once $path . '/includes/biblio.keywords.inc';
 
   // Defaults to once per day.
   $interval = variable_get('biblio_orphan_clean_interval', 24 * 60 * 60);
