@@ -568,6 +568,10 @@ function theme_biblio_format_authors($variables) {
         }
       }
 
+      // Remove double periods which can exist if a first name is entered as an
+      // initial followed by a period.
+      $author['firstname'] = preg_replace('/\.{2,}/', '.', $author['firstname']);
+
       // If there is a surname prefix like "van", "von" etc, stick it back before the last name.
       if (!empty($author['prefix'])) {
         $author['lastname'] = $author['prefix'] . ' ' . $author['lastname'];
