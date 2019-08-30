@@ -812,7 +812,7 @@ function theme_biblio_style($variables) {
   else {
     drupal_set_message(t('The style function: @funct does not exist', array('@funct' => $style_function)), 'error');
   }
-  return ($styled_node . filter_xss($node->biblio_coins, array('span')));
+  return $styled_node . (isset($node->biblio_coins) ? filter_xss($node->biblio_coins, array('span')) : NULL);
 }
 
 /**
