@@ -891,7 +891,8 @@ function biblio_section_bar($text) {
 
 /**
  * @param $form_state
- * @return unknown_type
+ *
+ * @return
  */
 function biblio_search_form($form, &$form_state) {
   $base = variable_get('biblio_base', 'biblio');
@@ -982,7 +983,8 @@ function biblio_search_query($keys) {
 
 /**
  * @param $arg
- * @return unknown_type
+ *
+ * @return
  */
 function _get_biblio_search_filter($arg = 'keys') {
   if (variable_get('biblio_search', 0) &&
@@ -1066,7 +1068,7 @@ function _get_biblio_filters() {
 }
 
 /**
- * @return unknown_type
+ * @return
  */
 function biblio_form_filter() {
   $session = isset($_SESSION['biblio_filter']) ? $_SESSION['biblio_filter'] : array();
@@ -1156,7 +1158,8 @@ function biblio_form_filter() {
 /**
  * @param $form
  * @param $form_state
- * @return unknown_type
+ *
+ * @return
  */
 function biblio_form_filter_submit($form, &$form_state) {
   // If the search filter was set, remove it now.
@@ -1195,7 +1198,7 @@ function biblio_form_filter_submit($form, &$form_state) {
 }
 
 /**
- * @return unknown_type
+ * @return
  */
 function biblio_citekey_view() {
   $citekey = arg(2);
