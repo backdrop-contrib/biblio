@@ -628,6 +628,8 @@ function _biblio_filter_info_line($args = array()) {
   if (count($filters)) {
     $i = 0;
     foreach ($filters as $type => $value) {
+      // Will $value be run through check_plain()?
+      $check_plain = TRUE;
       if ($type == 'search') {
         $search_content = $value;
         continue;
@@ -679,8 +681,8 @@ function _biblio_filter_info_line($args = array()) {
           $type = t("Type");
         }
       }
-      $params = array('%a' => check_plain(ucwords($type)) , '%b' => check_plain($value));
-      $filtercontent .= ($i++ ? t(' <strong>and</strong> %a is %b', $params) : t('%a is %b', $params));
+      $params = array('%a' => check_plain(ucwords($type)) , '!b' => $check_plain ? check_plain($value) : $value);
+      $filtercontent .= ($i++ ? t(' <strong>and</strong> %a is <em class="placeholder">!b</em>', $params) : t('%a is <em class="placeholder">!b</em>', $params));
     }
     if ($search_content) {
       $content .= '<div class="biblio-current-filters"><b>' . t('Search results for') . '</b>';
