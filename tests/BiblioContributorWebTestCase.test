@@ -52,6 +52,19 @@ class BiblioContributorWebTestCase extends BiblioWebTestCase {
     $node = node_load($nid, NULL, TRUE);
     $this->assertFalse(count($node->biblio_contributors), 'Test biblio_delete_contributors($node), should be zero authors on reload');
 
+    // Test that expected author paths redirect to author pages.
+    $account = $this->getUser('access biblio content');
+    $this->drupalLogin($account);
+    foreach (array('biblio/authors/1', 'admin/config/content/biblio/author/1') as $url) {
+      // Get the expected author path.
+      $this->drupalGet($url);
+      // HTTP status is correct.
+      $headers = $this->drupalGetHeaders(TRUE);
+      list(, $status) = explode(' ', $headers[0][':status'], 3);
+      $this->assertEqual($status, 302, 'Redirection response code was sent.' . $status);
+      // URL is correct.
+      $this->assertUrl('biblio', array('query' => array('f[author]' => 1)));
+    }
   }
 
   /**
