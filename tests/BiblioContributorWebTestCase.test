@@ -65,6 +65,15 @@ class BiblioContributorWebTestCase extends BiblioWebTestCase {
       // URL is correct.
       $this->assertUrl('biblio', array('query' => array('f[author]' => 1)));
     }
+
+    // Edit links do not appear for 'access biblio content';
+    $this->assertNoText('[edit]');
+
+    // Edit links appear for 'administer biblio';
+    $account = $this->getUser('administer biblio');
+    $this->drupalLogin($account);
+    $this->drupalGet('biblio', array('query' => array('f[author]' => 1)));
+    $this->assertText('[edit]');
   }
 
   /**

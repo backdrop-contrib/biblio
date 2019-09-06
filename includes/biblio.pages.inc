@@ -664,7 +664,14 @@ function _biblio_filter_info_line($args = array()) {
       if ($type == 'aid' || ($type == 'author' && is_numeric($value))) {
         module_load_include('inc', 'biblio', 'includes/biblio.contributors');
         $author = biblio_get_contributor($value);
-        $value = isset($author->name) ? $author->name : t('Unknown Author');
+        $check_plain = FALSE;
+        $value = isset($author->name) ? check_plain($author->name) : t('Unknown Author');
+
+        // Link to edit page for author.
+        if (drupal_valid_path(variable_get('biblio_base', 'biblio') . '/authors/%/edit')) {
+          $value .= _biblio_author_edit_links($author);
+        }
+
         $type = t("Author");
       }
       if ($type == 'ag') {
