@@ -1391,8 +1391,17 @@ function _biblio_author_edit_links($author) {
   // Cache $path.
   static $path = NULL;
   if (empty($path)) {
-    $path = (ord(substr($_GET['q'], -1)) > 97) ? $_GET['q'] . "/" : substr($_GET['q'], 0, -1);
-    $path = (strpos($path, 'list/')) ? str_replace('list/', '', $path) : $path;
+    // When the page is an admin page, use the admin author edit page. Usually:
+    // admin/config/content/biblio/author
+    // admin/config/content/biblio/author/list.
+    $search_path = 'admin/config/content/biblio/';
+    if (substr(current_path(), 0, 28) === $search_path) {
+      $path = 'admin/config/content/biblio/author/';
+    }
+    // Otherwise, use the public author edit path. Usually: $base/authors:
+    else {
+      $path = variable_get('biblio_base', 'biblio') . '/authors/';
+    }
   }
   return l(' [' . t('edit') . ']', $path . $author->cid . "/edit");
 }
