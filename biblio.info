@@ -8,7 +8,6 @@ configure = admin/config/content/biblio
 
 files[] = tests/BiblioContributorUnitTest.test
 files[] = tests/BiblioContributorWebTestCase.test
-files[] = tests/BiblioImportExportUnitTest.test
 files[] = tests/BiblioImportExportWebTestCase.test
 files[] = tests/BiblioKeywordWebTestCase.test
 files[] = tests/BiblioNodeCreationTestCase.test
