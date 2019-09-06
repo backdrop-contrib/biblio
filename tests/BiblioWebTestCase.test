@@ -33,6 +33,13 @@ class BiblioWebTestCase extends DrupalWebTestCase {
    */
   protected $admin_user;
 
+  /**
+   * Array of test users.
+   *
+   * @var array
+   */
+  protected $users;
+
   // @code
   // function tearDown() {
   //    if (!empty($this->kids)) {
@@ -63,6 +70,25 @@ class BiblioWebTestCase extends DrupalWebTestCase {
   //    $this->cids = array();
   // }
   // @endcode
+
+  /**
+   * Return a test user.
+   */
+  public function getUser($type) {
+    if (isset($users[$type])) {
+      return $users[$type];
+    }
+    switch ($type) {
+      case 'access biblio content':
+        $users[$type] = $this->drupalCreateUser(array('access biblio content'));
+        break;
+
+      case 'administer biblio':
+        $users[$type] = $this->drupalCreateUser(array('administer biblio', 'access biblio content'));
+        break;
+    }
+    return isset($users[$type]) ? $users[$type] : NULL;
+  }
 
   /**
    * Create a test node.
