@@ -10,7 +10,6 @@ files[] = tests/BiblioContributorUnitTest.test
 files[] = tests/BiblioContributorWebTestCase.test
 files[] = tests/BiblioImportExportUnitTest.test
 files[] = tests/BiblioImportExportWebTestCase.test
-files[] = tests/BiblioKeywordUnitTest.test
 files[] = tests/BiblioKeywordWebTestCase.test
 files[] = tests/BiblioNodeCreationTestCase.test
 files[] = tests/BiblioPageViewTestCase.test
