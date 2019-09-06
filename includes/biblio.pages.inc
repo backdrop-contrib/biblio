@@ -680,7 +680,7 @@ function _biblio_filter_info_line($args = array()) {
         }
       }
       $params = array('%a' => check_plain(ucwords($type)) , '%b' => check_plain($value));
-      $filtercontent .= ($i++ ? t('<em> and</em> <strong>%a</strong> is <strong>%b</strong>', $params) : t('<strong>%a</strong> is <strong>%b</strong>', $params));
+      $filtercontent .= ($i++ ? t(' <strong>and</strong> %a is %b', $params) : t('%a is %b', $params));
     }
     if ($search_content) {
       $content .= '<div class="biblio-current-filters"><b>' . t('Search results for') . '</b>';
