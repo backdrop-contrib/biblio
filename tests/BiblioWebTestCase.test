@@ -27,13 +27,6 @@ class BiblioWebTestCase extends DrupalWebTestCase {
   protected $nids = array();
 
   /**
-   * This variable is probably unused.
-   *
-   * @var null
-   */
-  protected $admin_user;
-
-  /**
    * Array of test users.
    *
    * @var array
