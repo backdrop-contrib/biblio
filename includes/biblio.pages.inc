@@ -1376,11 +1376,20 @@ function _biblio_format_author($author) {
 }
 
 /**
+ * Return an HTML link to an author edit page.
  *
+ * If current_path() is within the admin section of biblio, the link will be to
+ * the admin version of the edit page.
+ *
+ * @param object $author
+ *   The author object.
+ *
+ * @return string
+ *   The HTML link.
  */
 function _biblio_author_edit_links($author) {
-  static $path = '';
-  $destination = drupal_get_destination();
+  // Cache $path.
+  static $path = NULL;
   if (empty($path)) {
     $path = (ord(substr($_GET['q'], -1)) > 97) ? $_GET['q'] . "/" : substr($_GET['q'], 0, -1);
     $path = (strpos($path, 'list/')) ? str_replace('list/', '', $path) : $path;
