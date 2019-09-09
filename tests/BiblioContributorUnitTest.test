@@ -84,15 +84,4 @@ class BiblioContributorUnitTest extends DrupalUnitTestCase {
 
   }
 
-  /**
-   * Test formatting functions.
-   */
-  public function testFormatting() {
-    $random = $this->randomName();
-    $author = (object) array('cid' => $random);
-    require_once drupal_get_path('module', 'biblio') . '/includes/biblio.pages.inc';
-    $link = _biblio_author_edit_links($author);
-    $this->assertTrue(preg_match(',^<a href="/.+/authors/' . $random . '/edit"> \[edit\]</a>$,', $link), '_biblio_author_edit_links() returns valid link.');
-  }
-
 }
