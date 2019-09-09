@@ -21,7 +21,7 @@ class BiblioContributorUnitTest extends DrupalUnitTestCase {
    */
   public function setUp() {
     parent::setUp();
-    require_once drupal_get_path('module', 'biblio') . '/includes/biblio.contributors.inc';
+    require_once __DIR__ . '/../includes/biblio.contributors.inc';
   }
 
   /**

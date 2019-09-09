@@ -21,7 +21,7 @@ class BiblioKeywordWebTestCase extends BiblioWebTestCase {
    */
   public function setUp() {
     parent::setUp('biblio');
-    require_once drupal_get_path('module', 'biblio') . '/includes/biblio.keywords.inc';
+    require_once __DIR__ . '/../includes/biblio.keywords.inc';
   }
 
   /**
