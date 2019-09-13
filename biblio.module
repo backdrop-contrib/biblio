@@ -362,7 +362,7 @@ function biblio_autocomplete($field, $string = '') {
         $matches[$data->$field] = check_plain($data->$field);
       }
   }
-  print drupal_json_encode($matches);
+  print drupal_json_output($matches);
   exit();
 }
 
