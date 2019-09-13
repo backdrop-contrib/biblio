@@ -753,7 +753,7 @@ function biblio_menu() {
     'file'              => 'includes/biblio.pages.inc',
     'type'              => MENU_LOCAL_TASK,
   );
-  // The next two "LOCAL TASKS" are for the admin/config/content/biblio page.
+
   $items['admin/config/content/biblio'] = array(
     'title'             => 'Biblio settings',
     'description'       => 'Configure default behavior of the Biblio module.',
@@ -762,15 +762,9 @@ function biblio_menu() {
     'access arguments'  => array('administer biblio'),
     'file'              => 'includes/biblio.admin.inc',
   );
-
   $items['admin/config/content/biblio/basic'] = array(
     'title'             => 'Preferences',
-    'description'       => 'Configure default behavior of the Biblio module.',
-    'page callback'     => 'drupal_get_form',
-    'page arguments'    => array('biblio_admin_settings'),
-    'access arguments'  => array('administer biblio'),
-    'file'              => 'includes/biblio.admin.inc',
-    'type'              => MENU_LOCAL_TASK,
+    'type'              => MENU_DEFAULT_LOCAL_TASK,
     'weight'            => -10,
   );
   $items['admin/config/content/biblio/import'] = array(
