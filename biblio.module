@@ -363,7 +363,7 @@ function biblio_autocomplete($field, $string = '') {
       }
   }
   print drupal_json_output($matches);
-  exit();
+  drupal_exit();
 }
 
 /**
