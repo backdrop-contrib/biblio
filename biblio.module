@@ -317,7 +317,12 @@ function biblio_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Page callback for autocompletion. Outputs JSON of autocomplete options.
  *
+ * @param string $field
+ *   The field to search.
+ * @param string $string
+ *   The string to search for.
  */
 function biblio_autocomplete($field = NULL, $string = '') {
   $matches = array();
