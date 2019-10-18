@@ -1189,7 +1189,7 @@ function biblio_node_update($node) {
  *   TRUE if the node is being updated, FALSE if inserted.
  */
 function _biblio_index_node($node, $update) {
-  if ($node->type === 'biblio' && variable_get('biblio_index')) {
+  if ($node->type === 'biblio' && variable_get('biblio_index') && module_exists('search')) {
     if ($update) {
       // _node_index_node performs() a node_load() without resetting the
       // node_load() cache, so it would index the old version. We reset the cache
