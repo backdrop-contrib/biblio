@@ -1167,30 +1167,27 @@ function biblio_node_revision_delete($node) {
 }
 
 /**
- *
+ * Implements hook_node_insert().
  */
 function biblio_node_insert($node) {
-  if ($node->type == 'biblio') {
-    if (variable_get('biblio_index', 0)) {
-      _node_index_node($node);
-      search_update_totals();
-    }
+  if ($node->type === 'biblio' && variable_get('biblio_index')) {
+    _node_index_node($node);
+    search_update_totals();
   }
 }
 
 /**
- *
+ * Implements hook_node_update().
  */
 function biblio_node_update($node) {
-  if ($node->type == 'biblio') {
-    if (variable_get('biblio_index', 0)) {
-      // _node_index_node performs a node_load without resetting the node_load cache,
-      // so it would index the old version. We reset the cache here.
-      // Don't assign node_load to $node because node_load resets e.g. the menus mlid etc.
-      $mynode = node_load($node->nid, NULL, TRUE);
-      _node_index_node($mynode);
-      search_update_totals();
-    }
+  if ($node->type === 'biblio' && variable_get('biblio_index')) {
+    // _node_index_node performs() a node_load() without resetting the
+    // node_load() cache, so it would index the old version. We reset the cache
+    // here. Don't assign node_load to $node because node_load resets e.g. the
+    // menus mlid etc.
+    $mynode = node_load($node->nid, NULL, TRUE);
+    _node_index_node($mynode);
+    search_update_totals();
   }
 }
 
