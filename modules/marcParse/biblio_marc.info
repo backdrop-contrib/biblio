@@ -1,6 +1,8 @@
 name = Biblio - MARC
 description = Provides MARC file import to the Biblio module.
-core = 7.x
 package = Biblio
+version = 1.x-1.x
 dependencies[] = biblio
+type = module
+backdrop = 1.x
 files[] = php-marc.php
