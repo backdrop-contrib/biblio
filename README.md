@@ -19,6 +19,15 @@ Drupal Biblio module. It defines:
   Congress MODS format for bibliographic data.) The feeds configuration could be
   edited to take data from a URL instead of a local file.
 
+### Submodules
+
+None of the biblio submodules have been ported yet.
+
+If you are using any of the submodules and would like to see them available for
+use in Backdrop, please let us know which you are using on this issue:
+https://github.com/backdrop-contrib/biblio/issues/10
+
+
 Requirements
 ------------
 
@@ -72,4 +81,3 @@ License
 
 This project is GPL v2 software.
 See the LICENSE.txt file in this directory for complete text.
-
