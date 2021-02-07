@@ -1,6 +1,6 @@
 name = Biblio
 description = Defines a content type and views for bibliographic references
-package = Miscellaneous
+package = Biblio
 version = 1.x-1.x
 type = module
 backdrop = 1.x
