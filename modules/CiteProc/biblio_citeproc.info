@@ -1,6 +1,12 @@
+type = module
 name = Biblio - CiteProc
 description = Adds Citation Style Language (CSL) citation processing
 core = 7.x
 package = Biblio
 dependencies[] = biblio
 files[] = CSL.inc
+
+; this module has not yet been ported to Backdrop.
+; See https://github.com/backdrop-contrib/biblio/issues/10
+
+hidden = true

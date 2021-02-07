@@ -1,5 +1,11 @@
+type = module
 name = Biblio - RIS
 description = Provides RIS file import and export to the Biblio module.
 core = 7.x
 package = Biblio
 dependencies[] = biblio
+
+; this module has not yet been ported to Backdrop.
+; See https://github.com/backdrop-contrib/biblio/issues/10
+
+hidden = true
