@@ -1,7 +1,7 @@
 name = Biblio - BibTeX
 description = Provides BibTeX import and export to the Biblio module.
 package = Biblio
-version = 1.x-1.x
+version = 1.x-2.x
 dependencies[] = biblio
 type = module
 backdrop = 1.x
