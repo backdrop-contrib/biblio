@@ -1,7 +1,7 @@
 name = Biblio - CiteProc
 description = Adds Citation Style Language (CSL) citation processing
 package = Biblio
-version = 1.x-1.x
+version = 1.x-2.x
 dependencies[] = biblio
 type = module
 backdrop = 1.x
