@@ -1,7 +1,9 @@
 name = Biblio - PubMed
 description = Provides PubMed import and search to the Biblio module.
-core = 7.x
 package = Biblio
+version = 1.x-1.x
 dependencies[] = biblio
+type = module
+backdrop = 1.x
 files[] = EntrezClient.php
 files[] = EntrezPubmedArticle.php
