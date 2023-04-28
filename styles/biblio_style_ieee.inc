@@ -61,7 +61,7 @@ function biblio_style_ieee($node) {
   if (!empty($primary_authors)) {
     $authors = theme('biblio_format_authors', array('contributors' => $primary_authors, 'options' => $author_options));
   }
-  if (!empty($node->biblio_citekey) && (variable_get('biblio_display_citation_key', 0))) {
+  if (!empty($node->biblio_citekey) && (config_get('biblio.settings', 'biblio_display_citation_key'))) {
     $output .= '[' . check_plain($node->biblio_citekey) . '] ';
   }
 

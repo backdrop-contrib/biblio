@@ -74,14 +74,14 @@ function biblio_style_apa($node) {
   if (empty($authors) && !empty($corp_authors)) {
     foreach ($corp_authors as $rank => $author) {
       $authors .= (empty($authors)) ? '' : ', ';
-      $authors .= (variable_get('biblio_author_links', 1)) ? theme('biblio_author_link', array('author' => $author)) : $author['name'];
+      $authors .= (config_get('biblio.settings', 'biblio_author_links')) ? theme('biblio_author_link', array('author' => $author)) : $author['name'];
     }
   }
   if (empty($authors)) {
     // Use anonymous if we still have nothing.
     $authors = '[' . t('Anonymous') . ']';
   }
-  if (!empty($node->biblio_citekey)&&(variable_get('biblio_display_citation_key', 0))) {
+  if (!empty($node->biblio_citekey) && (config_get('biblio.settings', 'biblio_display_citation_key'))) {
     $output .= '[' . check_plain($node->biblio_citekey) . '] ';
   }
   $output .= '<span class="biblio-authors">' . $authors . "</span> \n";

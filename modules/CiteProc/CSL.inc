@@ -700,7 +700,7 @@ class csl_name extends csl_format {
    *
    */
   public function author_link($author) {
-    $base = variable_get('biblio_base', 'biblio');
+    $base = config_get('biblio.settings', 'biblio_base');
     $options = array();
 
     if (isset($_GET['sort'])) {
@@ -807,7 +807,7 @@ class csl_name extends csl_format {
           }
         }
       }
-      if (variable_get('biblio_author_links', 1)) {
+      if (config_get('biblio.settings', 'biblio_author_links')) {
         $text = theme('biblio_author_link', array('author' => $name, 'options' => $options));
       }
 

@@ -10,6 +10,7 @@
 function biblio_citeproc_style_manager_form($form, &$form_state) {
   $form = array();
   $options = array();
+  $config = config('biblio.settings');
 
   $cache = cache_get('biblio_citeproc_styles');
 
@@ -114,15 +115,16 @@ function biblio_citeproc_style_manager_form($form, &$form_state) {
     '#description' => t('Currently installed styles.'),
   );
 
+  $biblio_citeproc_style = config_get('biblio.settings', 'biblio_citeproc_style');
   $form['current_default'] = array(
-    '#markup' => empty($details) ? '' : $details[variable_get('biblio_citeproc_style', 'ieee.csl')]->title,
+    '#markup' => empty($details) ? '' : $details[$biblio_citeproc_style]->title,
   );
 
   $form['current_summary'] = array(
-    '#markup' => empty($details) ? '' : $details[variable_get('biblio_citeproc_style', 'ieee.csl')]->summary,
+    '#markup' => empty($details) ? '' : $details[$biblio_citeproc_style]->summary,
   );
 
-  $timestamp = $details[variable_get('biblio_citeproc_style', 'ieee.csl')]->updated;
+  $timestamp = $details[$biblio_citeproc_style]->updated;
   $updated = $timestamp ? ' (' . t('Last updated:') . ' ' . format_date($timestamp, 'medium') . ')' : '';
 
   $form['current_update'] = array(
@@ -518,7 +520,7 @@ function _uninstall_selected($ids = array()) {
     if (!empty($children)) {
       db_delete('biblio_citeproc_styles')->condition('filename', $children, 'IN')->execute();
     }
-    if (variable_get('biblio_citeproc_style', 'ieee.csl') == $id) {
+    if (config_get('biblio.settings', 'biblio_citeproc_style') == $id) {
       variable_del('biblio_citeproc_style');
     }
   }

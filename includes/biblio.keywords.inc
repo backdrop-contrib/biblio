@@ -132,7 +132,7 @@ function biblio_update_keywords($node) {
  *   An array of keyword ID's from this node
  */
 function biblio_insert_keywords($node, $update = FALSE) {
-  $kw_vocab = variable_get('biblio_keyword_vocabulary', 0);
+  $kw_vocab = config_get('biblio.settings', 'biblio_keyword_vocabulary');
   $taxo_terms = $typed_keywords = array();
   $freetag_vocab = FALSE;
   if (isset($node->biblio_keywords) && !is_array($node->biblio_keywords)) {
@@ -155,14 +155,14 @@ function biblio_insert_keywords($node, $update = FALSE) {
   }
 
   $vocabularies = module_invoke('taxonomy', 'get_vocabularies');
-  $vid = variable_get('biblio_keyword_vocabulary', 0);
+  $vid = config_get('biblio.settings', 'biblio_keyword_vocabulary');
 
-  if (variable_get('biblio_keyword_freetagging', 0) && $vid) {
-    $freetag_vocab = $vocabularies[variable_get('biblio_keyword_vocabulary', 0)];
+  if (config_get('biblio.settings', 'biblio_keyword_freetagging') && $vid) {
+    $freetag_vocab = $vocabularies[config_get('biblio.settings', 'biblio_keyword_vocabulary')];
   }
 
   // Add any taxonomy terms to our keyword list.
-  if (isset($node->taxonomy) && is_array($node->taxonomy) && variable_get('biblio_copy_taxo_terms_to_keywords', 0)) {
+  if (isset($node->taxonomy) && is_array($node->taxonomy) && config_get('biblio.settings', 'biblio_copy_taxo_terms_to_keywords')) {
     foreach ($node->taxonomy as $vid => $term) {
       // don't copy if user overrides the default to copy, just set the $taxo_terms to an empty array and break out of the for loop.
       if ($vid == 'copy_to_biblio' && $term == 0) {
@@ -218,8 +218,8 @@ function biblio_insert_keywords($node, $update = FALSE) {
 
   // Now if we are saving keywords into a taxonomy freetagging vocabulary, then create the tags string and add it to the node object.
   $vocabularies = module_invoke('taxonomy', 'get_vocabularies');
-  $vid          = variable_get('biblio_keyword_vocabulary', 0);
-  $freetagging  = variable_get('biblio_keyword_freetagging', 0);
+  $vid          = config_get('biblio.settings', 'biblio_keyword_vocabulary');
+  $freetagging  = config_get('biblio.settings', 'biblio_keyword_freetagging');
 
   if ($freetagging && $vid) {
     $freetag_vocab = $vocabularies[$vid];
@@ -335,7 +335,7 @@ function biblio_get_orphaned_keyword_ids() {
 function biblio_delete_orphan_keywords($force = FALSE) {
   $count = 0;
 
-  if (variable_get('biblio_keyword_orphan_autoclean', 0) || $force) {
+  if (config_get('biblio.settings', 'biblio_keyword_orphan_autoclean') || $force) {
     $orphans = biblio_get_orphaned_keyword_ids();
     if (!empty($orphans)) {
       $count = db_delete('biblio_keyword_data')
@@ -424,7 +424,7 @@ function biblio_delete_keyword($keyword_id) {
  * @return array
  */
 function biblio_explode_keywords($string) {
-  $sep = variable_get('biblio_keyword_sep', ',');
+  $sep = config_get('biblio.settings', 'biblio_keyword_sep');
   $regexp = '%(?:^|' . $sep . '\ *)("(?>[^"]*)(?>""[^"]* )*"|(?: [^"' . $sep . ']*))%x';
   preg_match_all($regexp, $string, $matches);
   $keyword_array = array_unique($matches[1]);
@@ -450,7 +450,7 @@ function biblio_explode_keywords($string) {
  */
 function biblio_implode_keywords($keywords, $sep = '') {
   if (empty($sep)) {
-    $sep = variable_get('biblio_keyword_sep', ',');
+    $sep = config_get('biblio.settings', 'biblio_keyword_sep');
   }
   $string = '';
   foreach ($keywords as $kid => $keyword) {

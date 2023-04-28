@@ -105,7 +105,7 @@ class biblio_handler_citation extends views_handler_field {
     }
 
     if (empty($this->biblio_base)) {
-      $this->biblio_base = variable_get('biblio_base', 'biblio');
+      $this->biblio_base = config_get('biblio.settings', 'biblio_base');
     }
 
     $item = $values->node;
@@ -113,7 +113,7 @@ class biblio_handler_citation extends views_handler_field {
     if (isset($item->biblio_year)) {
       $item->biblio_year = _biblio_text_year($item->biblio_year);
     }
-    if (variable_get('biblio_hide_bibtex_braces', 0)) {
+    if (config_get('biblio.settings', 'biblio_hide_bibtex_braces')) {
       $item->title = biblio_remove_brace($item->title);
     }
 
@@ -124,14 +124,14 @@ class biblio_handler_citation extends views_handler_field {
     // First add the styled entry...
     $output .= theme('biblio_style', array('node' => $item, 'style_name' => $this->options['style_name']));
 
-    $annotation_field = variable_get('biblio_annotations', 'none');
+    $annotation_field = config_get('biblio.settings', 'biblio_annotations');
     if ($annotation_field != 'none' && $item->$annotation_field) {
       $output .= '<div class="biblio-annotation">';
       $output .= filter_xss($item->$annotation_field, biblio_get_allowed_tags());
       $output .= '</div>';
     }
 
-    $openurl_base = variable_get('biblio_baseopenurl', '');
+    $openurl_base = config_get('biblio.settings', 'biblio_baseopenurl');
     if (!empty($openurl_base) && $this->options['open_url_link']) {
       $output .= theme('biblio_openurl', array('openURL' => biblio_openurl($item)));
     }

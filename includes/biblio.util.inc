@@ -8,8 +8,7 @@
  *
  */
 function biblio_normalize_title($title) {
-  $stop_words = 'a,an,the,is,on';
-  $stop_words = explode(',', variable_get('biblio_stop_words', $stop_words));
+  $stop_words = explode(',', config_get('biblio.settings', 'biblio_stop_words'));
   if (!@preg_match('/\pL/u', 'a')) {
     // Probably a broken PCRE library.
     $title = trim(_strip_punctuation($title));
@@ -83,20 +82,7 @@ function biblio_contextObject($node) {
   // Original Author:    Richard Karnesky <mailto:karnesky@gmail.com>  //
   // Adapted for biblio: Ron Jerome.
   global $base_url;
-  $i = 0;
-  // $openurl_base = variable_get('biblio_baseopenurl', '');.
   $co = array();
-  // rfr_id
-  //  $co["rfr_id"] = "info:sid/". ereg_replace("http://", "", $base_url);
-  //  // genre (type)
-  //  if (isset($node->biblio_type)) {
-  //    if ($node->biblio_type == 102)
-  //    $co["rft.genre"] = "article";
-  //    elseif ($node->biblio_type == 101) $co["rft.genre"] = "bookitem";
-  //    elseif ($node->biblio_type == 100) $co["rft.genre"] = "book";
-  //    elseif ($node->biblio_type == "Journal") $co["rft.genre"] = "journal";
-  //  }
-  // atitle, btitle, title (title, publication)
   if (($node->biblio_type == 102) || ($node->biblio_type == 101)) {
     if (!empty($node->title)) {
       $co["rft.atitle"] = check_plain($node->title);

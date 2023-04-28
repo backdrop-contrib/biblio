@@ -69,7 +69,7 @@ function biblio_profile_page($user) {
       ),
     );
   }
-  $arg_list['page_limit'] = variable_get('biblio_rowsperpage', 25);
+  $arg_list['page_limit'] = config_get('biblio.settings', 'biblio_rowsperpage');
 
   list($nids, $extras, $rss_info) = biblio_build_query($arg_list);
   $render['biblio_page']['header'] = biblio_page_header($arg_list);
@@ -83,13 +83,14 @@ function biblio_profile_page($user) {
  *
  */
 function biblio_page() {
+  $config = config('biblio.settings');
   $nodes = $nids = $extras = $rss_info = $info = $arg_list = $render = array();
-  $base = variable_get('biblio_base', 'biblio');
+  $base = $config->get('biblio_base');
 
   $info['func_args'] = func_get_args();
   $info['uri'] = drupal_parse_url(request_uri());
   $arg_list = biblio_arg_handler($info);
-  $arg_list['page_limit'] = variable_get('biblio_rowsperpage', 25);
+  $arg_list['page_limit'] = $config->get('biblio_rowsperpage');
 
   list($nids, $extras, $rss_info) = biblio_build_query($arg_list);
   if ($rss_info['feed']) {
@@ -97,16 +98,16 @@ function biblio_page() {
     return;
   }
 
-  if (variable_get('biblio_rss', 0)) {
+  if ($config->get('biblio_rss')) {
     drupal_add_html_head_link(array(
       'rel' => 'alternate',
       'type' => 'application/rss+xml',
-      'title' => variable_get('site_name', 'Drupal') . ' RSS',
+      'title' => config_get('system.core', 'site_name') . ' RSS',
       'href' => url("$base/rss.xml"),
     ));
   }
 
-  drupal_set_title(t(check_plain(variable_get('biblio_base_title', 'Biblio'))));
+  drupal_set_title(t(check_plain($config->get('biblio_base_title'))));
   $filter = (isset($arg_list['f'])) ? array('f' => $arg_list['f']) : array();
 
   $render['biblio_page']['header'] = biblio_page_header($filter);
@@ -124,7 +125,7 @@ function biblio_page() {
  *
  */
 function biblio_page_header($filter = array()) {
-  $header = array();
+  $config = config('biblio.settings');
   $header = array(
     '#prefix' => '<div id="biblio-header" class="clear-block">',
     '#suffix' => '</div>',
@@ -132,7 +133,7 @@ function biblio_page_header($filter = array()) {
   );
 
   // Search box. Has same permissions as the filter tab.
-  if (variable_get('biblio_search', 0) && user_access('show filter tab')) {
+  if ($config->get('biblio_search') && user_access('show filter tab')) {
     $header += array(
       'search_form' => drupal_get_form('biblio_search_form'),
     );
@@ -183,11 +184,12 @@ function biblio_page_header($filter = array()) {
         'alpha_line' => array(
           '#prefix' => '<div class="biblio-alpha-line">',
           '#suffix' => '</div>',
-          '#markup' => theme('biblio_alpha_line', array(
-            'type' => $_GET['s'],
-            'current' => $value,
-            'path' => variable_get('biblio_base', 'biblio'),
-          )
+          '#markup' => theme('biblio_alpha_line',
+            array(
+              'type' => $_GET['s'],
+              'current' => $value,
+              'path' => $config->get('biblio_base'),
+            )
           ),
         ),
       );
@@ -201,7 +203,6 @@ function biblio_page_header($filter = array()) {
  *
  */
 function biblio_page_content($nids = array(), $extras = array()) {
-  $base = variable_get('biblio_base', 'biblio');
   $content = $raw_nodes = $nodes = array();
   $count = $section_id = 0;
 
@@ -232,7 +233,7 @@ function biblio_page_content($nids = array(), $extras = array()) {
     if (is_array($node)) {
       $node = (object) $node;
     }
-    if (variable_get('biblio_hide_bibtex_braces', 0)) {
+    if (config_get('biblio.settings', 'biblio_hide_bibtex_braces')) {
       $node->title = biblio_remove_brace($node->title);
     }
 
@@ -257,18 +258,8 @@ function biblio_page_content($nids = array(), $extras = array()) {
  *
  */
 function biblio_entry($node) {
-  $entry = array();
+  $config = config('biblio.settings');
   $style = biblio_get_style();
-
-  /*
-  $select_box = array(
-  '#type' => 'checkbox',
-  '#return_value'  => $node->nid,
-  '#default_value' => 0,
-  '#attributes' => array('class' => array('biblio-export-selector'),)
-
-  );
-   */
   $prefix = '<div class="biblio-entry">';
   $suffix = '</div>';
   if (!$node->status) {
@@ -283,7 +274,7 @@ function biblio_entry($node) {
 
   $entry['entry']['#markup'] = theme('biblio_style', array('node' => $node, 'style_name' => $style));
 
-  $annotation_field = variable_get('biblio_annotations', 'none');
+  $annotation_field = $config->get('biblio_annotations');
   if ($annotation_field != 'none' && $node->$annotation_field) {
     $entry['annotation'] = array(
       '#prefix' => '<div class="biblio-annotation">',
@@ -292,7 +283,7 @@ function biblio_entry($node) {
     );
   }
 
-  $openurl_base = variable_get('biblio_baseopenurl', '');
+  $openurl_base = $config->get('biblio_baseopenurl');
 
   if ($openurl_base) {
     $entry['openurl'] = array(
@@ -301,7 +292,6 @@ function biblio_entry($node) {
   }
 
   if (biblio_access('export')) {
-    $base = variable_get('biblio_base', 'biblio');
     $entry['export_links'] = array(
       '#markup' => theme('biblio_export_links', array('node' => $node)),
     );
@@ -324,13 +314,14 @@ function biblio_entry($node) {
  */
 function biblio_build_query($arg_list) {
   global $user;
+  $config = config('biblio.settings');
   // biblio_contributor (bc) count , increase for every invocation.
   static $bcc = 0;
   static $bkd = 0;
   // Term counter, increase for every invocation.
   static $tcc = 0;
   $rss_info['feed'] = FALSE;
-  $rss_info['title'] = variable_get('biblio_base_title', 'Biblio');
+  $rss_info['title'] = $config->get('biblio_base_title');
   $rss_info['link'] = '';
   $rss_info['description'] = '';
 
@@ -354,7 +345,7 @@ function biblio_build_query($arg_list) {
   $match_op = (db_driver() == 'pgsql') ? '~*' : 'RLIKE';
 
   $limit = '';
-  if (variable_get('biblio_view_only_own', 0)) {
+  if ($config->get('biblio_view_only_own')) {
     $limit .= " AND n.uid = $user->uid ";
   }
 
@@ -364,7 +355,7 @@ function biblio_build_query($arg_list) {
     unset($arg_list['sort']);
   }
   else {
-    $sort = variable_get('biblio_sort', 'year');
+    $sort = $config->get('biblio_sort');
   }
 
   if (isset($arg_list['o']) || isset($arg_list['order'])) {
@@ -378,21 +369,8 @@ function biblio_build_query($arg_list) {
     }
   }
   else {
-    $order = strtolower(variable_get('biblio_order', 'DESC'));
+    $order = strtolower($config->get('biblio_order'));
   }
-
-  /*  if (!isset($_SESSION['biblio_filter']) || !is_array($_SESSION['biblio_filter'])) {
-  $_SESSION['biblio_filter'] = array();
-  }
-
-  $session = &$_SESSION['biblio_filter'];
-
-  if (!in_array('no_filters', $arg_list)) {
-  foreach ($session as $filter) {
-  $arg_list = array_merge($arg_list, $filter);
-  }
-  }
-   */
 
   switch ($sort) {
     case 'type':
@@ -443,7 +421,7 @@ function biblio_build_query($arg_list) {
 
         case 'rss.xml':
           $rss_info['feed'] = TRUE;
-          $query->limit(variable_get('biblio_rss_number_of_entries', 10));
+          $query->limit($config->get('biblio_rss_number_of_entries'));
           break;
 
         case 'term':
@@ -520,7 +498,7 @@ function biblio_build_query($arg_list) {
             // https://dev.mysql.com/doc/refman/5.7/en/regexp.html
             $query->condition('bcd.name', "[[:<:]]" . preg_quote($value) . "[[:>:]]", $match_op);
             $rss_info['title'] = t("Publications by @value", array('@value' => $value));
-            $rss_info['description'] = t("These publications by %author are part of the works listed at %sitename", array('%author' => $value, '%sitename' => variable_get('site_name', 'Drupal')));
+            $rss_info['description'] = t("These publications by %author are part of the works listed at %sitename", array('%author' => $value, '%sitename' => config_get('system.core', 'site_name')));
             $rss_info['link'] = '/author/' . $value;
           }
           break;
@@ -558,7 +536,7 @@ function biblio_build_query($arg_list) {
               $query->condition('bkd.word', "[[:<:]]" . preg_quote($value) . "[[:>:]]", 'LIKE');
             }
             $rss_info['title'] = t("Keyword @value", array('@value' => $value));
-            $rss_info['description'] = t("These publications, containing the keyword: %keyword, are part of the works listed at %sitename", array('%keyword' => $value, '%sitename' => variable_get('site_name', 'Drupal')));
+            $rss_info['description'] = t("These publications, containing the keyword: %keyword, are part of the works listed at %sitename", array('%keyword' => $value, '%sitename' => config_get('system.core', 'site_name')));
             $rss_info['link'] = '/keyword/' . $value;
           }
           break;
@@ -619,11 +597,11 @@ function _biblio_filter_info_line($args = array()) {
   $filtercontent = '';
   $search_content = FALSE;
   $profile_content = FALSE;
-  $base = variable_get('biblio_base', 'biblio');
-  $session = !empty($_SESSION['biblio_filter']) ? $_SESSION['biblio_filter'] : array();
+  $base = config_get('biblio.settings', 'biblio_base');
+
   // If there are any filters in place, print them at the top of the list.
   $uri = drupal_parse_url(request_uri());
-  $uri['path'] = variable_get('biblio_base', 'biblio');
+  $uri['path'] = $base;
   $filters = isset($uri['query']['f']) ? $uri['query']['f'] : (isset($args['f']) ? $args['f'] : array());
   if (count($filters)) {
     $i = 0;
@@ -668,7 +646,7 @@ function _biblio_filter_info_line($args = array()) {
         $value = isset($author->name) ? check_plain($author->name) : t('Unknown Author');
 
         // Link to edit page for author.
-        if (drupal_valid_path(variable_get('biblio_base', 'biblio') . '/authors/%/edit')) {
+        if (drupal_valid_path($base . '/authors/%/edit')) {
           $value .= _biblio_author_edit_links($author);
         }
 
@@ -738,7 +716,7 @@ function _biblio_category_separator_bar($node, $reset = FALSE) {
     $sort = $_GET['s'];
   }
   else {
-    $sort = variable_get('biblio_sort', 'year');
+    $sort = config_get('biblio.settings', 'biblio_sort');
   }
 
   switch ($sort) {
@@ -823,7 +801,7 @@ function biblio_category_section($node, $reset = FALSE) {
     $sort = $_GET['s'];
   }
   else {
-    $sort = variable_get('biblio_sort', 'year');
+    $sort = config_get('biblio.settings', 'biblio_sort');
   }
 
   switch ($sort) {
@@ -904,7 +882,7 @@ function biblio_section_bar($text) {
  * @return
  */
 function biblio_search_form($form, &$form_state) {
-  $base = variable_get('biblio_base', 'biblio');
+  $config = config('biblio.settings');
   $searchform['biblio_search'] = array(
     '#prefix' => '<div class="container-inline biblio-search clear-block">',
     '#suffix' => '</div>',
@@ -916,7 +894,7 @@ function biblio_search_form($form, &$form_state) {
     '#size' => 25,
     '#maxlength' => 255,
   );
-  $button_text = variable_get('biblio_search_button_text', 'Biblio search');
+  $button_text = $config->getTranslated('biblio_search_button_text');
   $searchform['biblio_search']['submit'] = array(
     '#type' => 'submit',
     '#value' => t($button_text),
@@ -929,7 +907,7 @@ function biblio_search_form($form, &$form_state) {
     '#collapsed' => TRUE,
     'searchform' => $searchform,
   );
-  if (variable_get('biblio_search_form_filter', TRUE)) {
+  if ($config->get('biblio_search_form_filter')) {
     $form['search_form']['filterform'] = biblio_form_filter();
   }
 
@@ -941,11 +919,10 @@ function biblio_search_form($form, &$form_state) {
  */
 function biblio_search_form_submit($form, &$form_state) {
   static $keys = '';
-  $base = variable_get('biblio_base', 'biblio');
   $keys = trim($form_state['values']['keys']);
   if (!empty($keys)) {
     $uri = drupal_parse_url(request_uri());
-    $uri['path'] = variable_get('biblio_base', 'biblio');
+    $uri['path'] = config_get('biblio.settings', 'biblio_base');
     $uri['query']['f']['search'] = $keys;
     $form_state['redirect'] = array($uri['path'], $uri);
   }
@@ -996,7 +973,7 @@ function biblio_search_query($keys) {
  * @return
  */
 function _get_biblio_search_filter($arg = 'keys') {
-  if (variable_get('biblio_search', 0) &&
+  if (config_get('biblio.settings', 'biblio_search') &&
     !empty($_SESSION['biblio_filter']) &&
     is_array($_SESSION['biblio_filter']) &&
     is_array($_SESSION['biblio_filter'][0]) &&
@@ -1181,7 +1158,7 @@ function biblio_form_filter_submit($form, &$form_state) {
     case t('Filter'):
     case t('Refine'):
       $uri = drupal_parse_url(request_uri());
-      $uri['path'] = variable_get('biblio_base', 'biblio');
+      $uri['path'] = config_get('biblio.settings', 'biblio_base');
       foreach ($filters as $filter => $options) {
         if (isset($form_state['values'][$filter]) && $form_state['values'][$filter] != 'any') {
           // Flatten the options array to accommodate hierarchical/nested options.
@@ -1352,6 +1329,7 @@ function _biblio_format_author_page($path, $filter, $authors) {
  * Helper function to format the authors and add edit links if required.
  */
 function _biblio_format_author($author) {
+  $config = config('biblio.settings');
   if ($author->literal) {
     $name = $author->name;
   }
@@ -1361,14 +1339,14 @@ function _biblio_format_author($author) {
              (!empty($author->initials) ? ', ' . $author->initials : '');
   }
 
-  $uri['path'] = variable_get('biblio_base', 'biblio');
+  $uri['path'] = $config->get('biblio_base');
   $uri['query']['f']['author'] = $author->cid;
   $uri['attributes'] = array();
 
   if (isset($author->drupal_uid) && $author->drupal_uid > 0) {
     $uri['attributes'] += array('class' => array('biblio-local-author'));
   }
-  if (variable_get('biblio_links_target_new_window', NULL)) {
+  if ($config->get('biblio_links_target_new_window')) {
     $uri['attributes'] += array('target' => '_blank');
     $uri['html'] = TRUE;
   }
@@ -1409,7 +1387,7 @@ function _biblio_author_edit_links($author) {
     }
     // Otherwise, use the public author edit path. Usually: $base/authors:
     else {
-      $path = variable_get('biblio_base', 'biblio') . '/authors/';
+      $path = config_get('biblio.settings', 'biblio_base') . '/authors/';
     }
   }
   return l(' [' . t('edit') . ']', $path . $author->cid . "/edit");
@@ -1420,7 +1398,6 @@ function _biblio_author_edit_links($author) {
  */
 function biblio_keyword_page() {
   $uri = drupal_parse_url(request_uri());
-  // $uri['path'] = variable_get('biblio_base', 'biblio');.
   $filter = isset($uri['query']['f']['keyword']) ? $uri['query']['f']['keyword'] : '';
   $keywords = _biblio_get_keywords($filter);
   return _biblio_format_keyword_page($uri, $filter, $keywords);
@@ -1486,7 +1463,7 @@ function _biblio_format_keyword_page($uri, $filter, $keywords) {
  *
  */
 function _biblio_format_keyword($uri, $keyword) {
-  $base                         = variable_get('biblio_base', 'biblio');
+  $base                         = config_get('biblio.settings', 'biblio_base');
   $uri['path']                  = $base;
   $uri['query']['f']['keyword'] = $keyword->kid;
   $format                       = l(trim($keyword->word), $base, $uri);

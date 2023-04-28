@@ -60,11 +60,11 @@ function biblio_rtf_link($type, $node = NULL, $teaser = FALSE) {
  * @return a link (<a href=...>rtf</a>)
  */
 function biblio_rtf_biblio_export_link($nid = NULL, $filter = array()) {
-  $show_link = variable_get('biblio_export_links', array('rtf' => TRUE));
-  if (!isset($show_link['rtf']) || empty($show_link['rtf']) || !biblio_access('export')) {
+  $show_link = config_get('biblio.settings', 'biblio_export_links') ?: array('rtf' => TRUE);
+  if (empty($show_link['rtf']) || !biblio_access('export')) {
     return array();
   }
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
 
   $link = array(
     'attributes' => array(
@@ -94,7 +94,7 @@ function biblio_rtf_biblio_export($nids) {
 
   $nodes = node_load_multiple($nids, array(), TRUE);
   foreach ($nodes as $node) {
-    if (variable_get('biblio_hide_bibtex_braces', 0)) {
+    if (config_get('biblio.settings', 'biblio_hide_bibtex_braces')) {
       $node->title = biblio_remove_brace($node->title);
     }
     $count++;

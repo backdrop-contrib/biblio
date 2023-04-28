@@ -386,7 +386,7 @@ function biblio_pm_biblio_lookup_link_settings() {
  *
  */
 function biblio_pm_biblio_lookup_link($node) {
-  $show_link = variable_get('biblio_lookup_links', array('pubmed' => TRUE));
+  $show_link = config_get('biblio.settings', 'biblio_lookup_links') ?: array('pubmed' => TRUE);
   if (!isset($show_link['pubmed']) ||
       !$show_link['pubmed'] ||
       !isset($node) ||
@@ -397,7 +397,7 @@ function biblio_pm_biblio_lookup_link($node) {
 
   $link = 'https://www.ncbi.nlm.nih.gov/pubmed/' . $node->biblio_pubmed_id . '?dopt=Abstract';
   $attrs = array('title' => t("Click to view the PubMed listing for this node"));
-  if (variable_get('biblio_links_target_new_window', NULL)) {
+  if (config_get('biblio.settings', 'biblio_links_target_new_window')) {
     $attrs = array_merge($attrs, array('target' => '_blank'));
   }
   return array(

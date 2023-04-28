@@ -408,3 +408,14 @@ function biblio_get_author_roles($code = FALSE) {
     return $mapping;
   }
 }
+
+/**
+ * Implements hook_config_info().
+ */
+function biblio_config_info() {
+  $prefixes['biblio.settings'] = array(
+    'label' => t('Biblio general settings'),
+    'group' => t('Biblio'),
+  );
+  return $prefixes;
+}

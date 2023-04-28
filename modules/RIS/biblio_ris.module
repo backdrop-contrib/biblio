@@ -107,11 +107,12 @@ function biblio_ris_form_biblio_node_form_submit($form, &$form_state) {
  * @return a link (<a href=...>ris</a>)
  */
 function biblio_ris_biblio_export_link($nid = NULL, $filter = array()) {
-  $show_link = variable_get('biblio_export_links', array('ris' => TRUE));
+  $config = config('biblio.settings');
+  $show_link = $config->get('biblio_export_links') ?: array('ris' => TRUE);
   if (!isset($show_link['ris']) || empty($show_link['ris']) || !biblio_access('export')) {
     return array();
   }
-  $base = variable_get('biblio_base', 'biblio');
+  $base = $config->get('biblio_base');
 
   if (module_exists('popups') && !empty($nid)) {
     $link = array(
@@ -207,7 +208,7 @@ function biblio_ris_biblio_export($nids) {
 
   $nodes = node_load_multiple($nids, array(), TRUE);
   foreach ($nodes as $node) {
-    if (variable_get('biblio_hide_bibtex_braces', 0)) {
+    if (config_get('biblio.settings', 'biblio_hide_bibtex_braces')) {
       $node->title = biblio_remove_brace($node->title);
     }
 
