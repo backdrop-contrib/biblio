@@ -52,6 +52,7 @@ function biblio_install() {
 function biblio_update_1000() {
   // Convert variables to config.
   $config = config('biblio.settings');
+  $config->set('biblio_base', update_variable_get('biblio_base', 'biblio'));
   $config->set('biblio_base_title', update_variable_get('biblio_base_title', 'Biblio'));
   $config->set('biblio_rowsperpage', update_variable_get('biblio_rowsperpage', 25));
   $config->set('biblio_view_only_own', update_variable_get('biblio_view_only_own', 0));

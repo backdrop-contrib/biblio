@@ -520,8 +520,10 @@ function _uninstall_selected($ids = array()) {
     if (!empty($children)) {
       db_delete('biblio_citeproc_styles')->condition('filename', $children, 'IN')->execute();
     }
-    if (config_get('biblio.settings', 'biblio_citeproc_style') == $id) {
-      variable_del('biblio_citeproc_style');
+
+    $config = config('biblio.settings');
+    if ($config->get('biblio_citeproc_style') == $id) {
+      $config->clear('biblio_citeproc_style');
     }
   }
 
