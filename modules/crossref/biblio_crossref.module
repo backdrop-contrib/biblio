@@ -2,7 +2,14 @@
 
 /**
  * @file
+ * Provides DOI lookup and import to the Biblio module for Backdrop
  */
+
+function biblio_crossref_autoload_info() {
+  return array(
+    'BiblioCrossRefClient' => 'includes/biblio_crossref_client.class.inc',
+  );
+}
 
 /**
  *

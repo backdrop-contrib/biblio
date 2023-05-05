@@ -1,12 +1,6 @@
 type = module
 name = Biblio - Crossref
 description = Provides DOI lookup and import to the Biblio module.
-core = 7.x
+backdrop = 1.x
 package = Biblio
 dependencies[] = biblio
-files[] = biblio.crossref.client.php
-
-; this module has not yet been ported to Backdrop.
-; See https://github.com/backdrop-contrib/biblio/issues/10
-
-hidden = true
