@@ -5,7 +5,7 @@
  */
 
 /**
- *
+ * Implements hook_views_data().
  */
 function biblio_pm_views_data() {
 

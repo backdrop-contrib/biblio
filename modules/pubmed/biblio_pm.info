@@ -1,13 +1,6 @@
 type = module
 name = Biblio - PubMed
 description = Provides PubMed import and search to the Biblio module.
-core = 7.x
 package = Biblio
+backdrop = 1.x
 dependencies[] = biblio
-files[] = EntrezClient.php
-files[] = EntrezPubmedArticle.php
-
-; this module has not yet been ported to Backdrop.
-; See https://github.com/backdrop-contrib/biblio/issues/10
-
-hidden = true
