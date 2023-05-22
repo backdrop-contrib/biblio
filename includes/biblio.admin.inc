@@ -14,6 +14,9 @@ function biblio_admin_settings() {
   $version = '$Name$ $Date$';
   $version = str_replace('$', '', $version);
 
+  $form['#config'] = 'biblio.settings';
+  $config = config($form['#config']);
+
   $form['biblio_settings'] = array(
     '#type' => 'vertical_tabs',
     '#weight' => 0,
@@ -38,7 +41,7 @@ function biblio_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('Base URL'),
     '#size' => 20,
-    '#default_value' => variable_get('biblio_base', 'biblio'),
+    '#default_value' => $config->get('biblio_base'),
     '#description' => t('This sets the base URL used to access the biblio module (e.g. /biblio ).'),
   );
   $form['#biblio_base'] = $form['general']['biblio_base']['#default_value'];
@@ -46,14 +49,14 @@ function biblio_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('Biblio page title'),
     '#size' => 20,
-    '#default_value' => variable_get('biblio_base_title', 'Biblio'),
+    '#default_value' => $config->get('biblio_base_title'),
     '#description' => t('The page title shown on the base URL.'),
   );
 
   $form['general']['biblio_rowsperpage'] = array(
     '#type' => 'textfield',
     '#title' => t('Number of results per page'),
-    '#default_value' => variable_get('biblio_rowsperpage', 25),
+    '#default_value' => $config->get('biblio_rowsperpage'),
     '#size' => 6,
     '#maxlength' => 6,
     '#description' => t('This sets the number of results that will be displayed per page.'),
@@ -62,14 +65,14 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Restrict users such that they can only view their own biblio entries'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_view_only_own', 0),
+    '#default_value' => $config->get('biblio_view_only_own'),
     '#description' => t('This option restricts the users capability to view biblio entries.  They will only be able to see the entries which they have created and own.'),
   );
   $form['general']['biblio_button_hide'] = array(
     '#type' => 'checkbox',
     '#title' => t('Hide next button in node form'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_button_hide', 1),
+    '#default_value' => $config->get('biblio_button_hide'),
     '#description' => t('If checkbox is set a javascript adds the accesible system class "element-invisible" to the next button in node form. The next button is not needed if javascript is available and listening on changes.'),
   );
   $form['authors'] = array(
@@ -85,13 +88,13 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Automatically delete orphaned authors'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_auto_orphaned_author_delete', 0),
+    '#default_value' => $config->get('biblio_auto_orphaned_author_delete'),
     '#description' => t('Orphaned authors are those which are no longer linked to any entries as the result of a biblio update or delete. This requires a functioning "cron" process.'),
   );
   $form['authors']['biblio_orphan_clean_interval'] = array(
     '#type' => 'radios',
     '#title' => t('Orphaned author cleaning frequency'),
-    '#default_value' => variable_get('biblio_orphan_clean_interval', 24 * 60 * 60),
+    '#default_value' => $config->get('biblio_orphan_clean_interval'),
     '#options' => array(
       0 => t('Every CRON run'),
       3600 => t('Hourly'),
@@ -110,7 +113,7 @@ function biblio_admin_settings() {
     '#title' => t('Number of contributor fields to initially display on the input form'),
     '#size' => 2,
     '#maxlength' => 2,
-    '#default_value' => variable_get('biblio_init_auth_count', 4),
+    '#default_value' => $config->get('biblio_init_auth_count'),
     '#description' => t('Increasing this value will increase the number of input fields displayed in the contributors section of the input form'),
   );
   $form['authors']['biblio_contrib_fields_delta'] = array(
@@ -118,7 +121,7 @@ function biblio_admin_settings() {
     '#title' => t('Number of fields added by the "Add more" button on the contributor input form'),
     '#size' => 2,
     '#maxlength' => 2,
-    '#default_value' => variable_get('biblio_contrib_fields_delta', 2),
+    '#default_value' => $config->get('biblio_contrib_fields_delta'),
     '#description' => t('This number of blank fields will be added to the contributors section of the input form each time the "Add more" button is pressed.'),
   );
   $form['bibtex'] = array(
@@ -134,14 +137,14 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Retain bibtex\'s {Protected} capitalization in the title string, but hide the braces on display'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_hide_bibtex_braces', 0),
+    '#default_value' => $config->get('biblio_hide_bibtex_braces'),
     '#description' => '',
   );
   $form['bibtex']['biblio_remove_double_bibtex_braces'] = array(
     '#type' => 'checkbox',
     '#title' => t('Configure the BibTeX import parser to replace all double braces with single braces.'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_remove_double_bibtex_braces', 0),
+    '#default_value' => $config->get('biblio_remove_double_bibtex_braces'),
     '#description' => t('<strong>{{</strong> will be replaced with <strong>{</strong> and <strong>}}</strong> will be replaced with <strong>}</strong>. This provides compatibility with importing BibTeX from the <a href="http://thomsonreuters.com/web-of-science/">Web of Science</a>. Be aware that this removes support for BibTeX "Protected Capitalization".'),
   );
 
@@ -170,20 +173,20 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Show citation key in results'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_display_citation_key', 0),
+    '#default_value' => $config->get('biblio_display_citation_key'),
     '#description' => t('This will output the citekey as the first item in the citation string'),
   );
   $form['citekey']['biblio_auto_citekey'] = array(
     '#type' => 'checkbox',
     '#title' => t('Auto generate citekeys if not given'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_auto_citekey', 1),
+    '#default_value' => $config->get('biblio_auto_citekey'),
     '#description' => t('This option will cause "citekey" entries to be automatically generated if a value is not provided.'),
   );
   $form['citekey']['biblio_citekey_prefix'] = array(
     '#type' => 'textfield',
     '#title' => t('Citekey prefix'),
-    '#default_value' => variable_get('biblio_citekey_prefix', ''),
+    '#default_value' => $config->get('biblio_citekey_prefix'),
     '#size' => 10,
     '#maxlength' => 10,
     '#description' => t('This text will be combined with the field choosen below to form the auto generated citekey.'),
@@ -191,14 +194,14 @@ function biblio_admin_settings() {
   $form['citekey']['biblio_citekey_field1'] = array(
     '#type' => 'select',
     '#title' => t('Primary Citekey  field'),
-    '#default_value' => variable_get('biblio_citekey_field1', 'nid'),
+    '#default_value' => $config->get('biblio_citekey_field1'),
     '#options' => $options,
     '#description' => t('Select the field to be used when generating citekeys.'),
   );
   $form['citekey']['biblio_citekey_field2'] = array(
     '#type' => 'select',
     '#title' => t('Secondary Citekey field'),
-    '#default_value' => variable_get('biblio_citekey_field2', 'nid'),
+    '#default_value' => $config->get('biblio_citekey_field2'),
     '#options' => $options,
     '#description' => t('If the field above has no value this field will be used.'),
   );
@@ -207,7 +210,7 @@ function biblio_admin_settings() {
     $form['citekey']['biblio_citekey_phpcode'] = array(
       '#type' => 'textarea',
       '#title' => t('PHP code for citekey generation'),
-      '#default_value' => variable_get('biblio_citekey_phpcode', ''),
+      '#default_value' => $config->get('biblio_citekey_phpcode'),
       '#description' => t('Advanced usage only: PHP code that returns the citekey. Should not include &lt;?php ?&gt; delimiters.'),
     );
   }
@@ -229,12 +232,12 @@ function biblio_admin_settings() {
     '#title' => t('Allow users to override these settings on their "My account" page') ,
     '#return_value' => 1,
     '#description' => t('If this is selected, a form similar to this section will be available to the user when they edit their own account information.  This will allow them to override the global preferences set here.') ,
-    '#default_value' => variable_get('biblio_show_crossref_profile_form', '1'),
+    '#default_value' => $config->get('biblio_show_crossref_profile_form'),
   );
   $form['biblio_crossref']['biblio_crossref_pid'] = array(
     '#type' => 'textfield',
     '#title' => t('CrossRef OpenURL Account ID'),
-    '#default_value' => variable_get('biblio_crossref_pid', ''),
+    '#default_value' => $config->get('biblio_crossref_pid'),
     '#description' => t('Enter your complimentary CrossRef OpenURL account ID which you can obtain here !url, OR enter your full CrossRef (colon separated) account:password combination.', array('!url' => l(t('OpenURL Account Request Form'), 'http://www.crossref.org/requestaccount/', $link_attrs))),
   );
 
@@ -250,7 +253,7 @@ function biblio_admin_settings() {
   if (!module_exists('footnotes')) {
     $additional_text = '<div class="admin-dependencies">' . t('Depends on') . ': ' . t('Footnotes') . ' (<span class="admin-disabled">' . t('disabled') . '</span>)</div>';
     $disabled = TRUE;
-    variable_set('biblio_footnotes_integration', 0);
+    $config->set('biblio_footnotes_integration', 0);
   }
   else {
     $additional_text = '<div class="admin-dependencies">' . t('Depends on') . ': ' . t('Footnotes') . ' (<span class="admin-enabled">' . t('enabled') . '</span>)</div>';
@@ -261,7 +264,7 @@ function biblio_admin_settings() {
     '#title' => t('Integration with the footnotes module') . $additional_text,
     '#disabled' => $disabled,
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_footnotes_integration', 0),
+    '#default_value' => $config->get('biblio_footnotes_integration'),
     '#description' => t('This will convert &lt;bib&gt; tags into &lt;fn&gt; tags.  This will cause intermingled &lt;bib&gt; and &lt;fn&gt; tags to be sequentially numbered.  For this to work, you must put the &lt;bib&gt; filter ahead of the &lt;fn&gt; filter in the filter chain.  If this option is not set, &lt;bib&gt; and &lt;fn&gt; tags will be handled separately.'),
   );
   $form['isi_wok'] = array(
@@ -277,7 +280,7 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Automatically replace "Go to ISI" links with the  URL below'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_fix_isi_links', 0),
+    '#default_value' => $config->get('biblio_fix_isi_links'),
     '#description' => t('This option automatically replaces any fake "Go to ISI" links with the supplied URL to ISI Web of Knowledge.  Note a subscription with ISI is required for these links to function.'),
   );
   $form['isi_wok']['biblio_isi_url'] = array(
@@ -285,7 +288,7 @@ function biblio_admin_settings() {
     '#title' => t('ISI Web of Knowledge URL'),
     '#size' => 128,
     '#maxlength' => 512,
-    '#default_value' => variable_get('biblio_isi_url', 'http://apps.isiknowledge.com/InboundService.do?Func=Frame&product=WOS&action=retrieve&SrcApp=EndNote&Init=Yes&SrcAuth=ResearchSoft&mode=FullRecord&UT='),
+    '#default_value' => $config->get('biblio_isi_url'),
     '#description' => t('Enter the URL which will replace the "Go to ISI" fake links imported from EndNote'),
   );
   $form['keywords'] = array(
@@ -301,14 +304,14 @@ function biblio_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('Keyword separator'),
     '#size' => 2,
-    '#default_value' => variable_get('biblio_keyword_sep', ','),
+    '#default_value' => $config->get('biblio_keyword_sep'),
     '#description' => t('Enter the character which will be used to separate multiple keywords in the keyword field'),
   );
   $form['keywords']['biblio_keyword_orphan_autoclean'] = array(
     '#type' => 'checkbox',
     '#title' => t('Automatically remove orphaned keywords'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_keyword_orphan_autoclean', 1),
+    '#default_value' => $config->get('biblio_keyword_orphan_autoclean'),
     '#description' => t('This option automatically deletes keywords which are no longer associated with any publications (primarily due to the due to the removal of a publication or editing a keyword).'),
   );
   $taxo_mesg = '<div class="admin-dependencies">' . t('Depends on') . ': ' . t('Taxonomy') . ' (<span class="admin-disabled">' . t('disabled') . '</span>)</div>';
@@ -316,15 +319,15 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Copy any selected taxonomy terms to the biblio keyword database'),
     '#return_value' => 1,
-    '#default_value' => module_exists('taxonomy') ? variable_get('biblio_copy_taxo_terms_to_keywords', 0) : 0,
+    '#default_value' => module_exists('taxonomy') ? $config->get('biblio_copy_taxo_terms_to_keywords') : 0,
     '#disabled' => (!module_exists('taxonomy')),
-    '#description' => module_exists('taxonomy') ? t('If this option is selected, the selected taxonomy terms will be copied to the @base_title keyword database and be displayed as keywords (as well as taxonomy terms) for this entry.', array('@base_title', variable_get('biblio_base_title', 'Biblio'))) : $taxo_mesg,
+    '#description' => module_exists('taxonomy') ? t('If this option is selected, the selected taxonomy terms will be copied to the @base_title keyword database and be displayed as keywords (as well as taxonomy terms) for this entry.', array('@base_title', $config->get('biblio_base_title'))) : $taxo_mesg,
   );
   $form['keywords']['biblio_keyword_freetagging'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use keywords from biblio entries as taxonomy "free tags"'),
     '#return_value' => 1,
-    '#default_value' => module_exists('taxonomy') ? variable_get('biblio_keyword_freetagging', 0) : 0,
+    '#default_value' => module_exists('taxonomy') ? $config->get('biblio_keyword_freetagging') : 0,
     '#disabled' => (!module_exists('taxonomy')),
     '#description' => module_exists('taxonomy') ? t('This option allows user to add keywords (free tags) to describe their documents. These keywords will be registered as taxonomy.') : $taxo_mesg,
   );
@@ -339,12 +342,10 @@ function biblio_admin_settings() {
     $form['keywords']['biblio_keyword_vocabulary'] = array(
       '#type' => 'select',
       '#title' => t('Vocabulary'),
-      '#default_value' => variable_get('biblio_keyword_vocabulary', 0),
+      '#default_value' => $config->get('biblio_keyword_vocabulary'),
       '#options' => $taxo_options,
       '#description' => t('Select vocabulary (category) to use for free tags.'),
       '#multiple' => FALSE,
-    // '#disabled' => (!variable_get('biblio_keyword_freetagging', 0)),
-    //    '#size' => $multiple ? min(9, count($taxo_options)) : 0,.
       '#weight' => 15,
       '#states' => array(
         'invisible' => array(
@@ -368,7 +369,6 @@ function biblio_admin_settings() {
     '#collapsed' => FALSE,
     '#title' => t('Export Links'),
   );
-  $options = array();
   $export_defaults = array();
   $options = module_invoke_all('biblio_export_options');
   if (!empty($options)) {
@@ -377,7 +377,7 @@ function biblio_admin_settings() {
   $form['links']['export']['biblio_export_links'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Show export links'),
-    '#default_value' => array_merge($export_defaults, variable_get('biblio_export_links', $export_defaults)),
+    '#default_value' => array_merge($export_defaults, $config->get('biblio_export_links')),
     '#options' => $options,
     '#description' => t('You can select which export links to display here.'),
   );
@@ -390,7 +390,7 @@ function biblio_admin_settings() {
   $form['links']['file_attachments']['biblio_file_link_type'] = array(
     '#type' => 'radios',
     '#title' => t('File attachment display'),
-    '#default_value' => variable_get('biblio_file_link_type', 'text'),
+    '#default_value' => $config->get('biblio_file_link_type'),
     '#options' => array(
       'text' => t('Text'),
       'icon' => t('Icon'),
@@ -412,7 +412,7 @@ function biblio_admin_settings() {
   $form['links']['google']['biblio_lookup_links'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Show lookup links'),
-    '#default_value' => array_merge($lookup_defaults, variable_get('biblio_lookup_links', $lookup_defaults)),
+    '#default_value' => array_merge($lookup_defaults, $config->get('biblio_lookup_links')),
     '#options' => $options,
     '#description' => t('You can select which lookup links to display here.'),
   );
@@ -421,14 +421,14 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Download links in "List" view link to "Node" view'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_download_links_to_node', 0),
+    '#default_value' => $config->get('biblio_download_links_to_node'),
     '#description' => t('If selected, the download links in the "List" view will link to the full "Node" view rather than the file itself, the file can then be downloaded from the node view'),
   );
   $form['links']['biblio_links_target_new_window'] = array(
     '#type' => 'checkbox',
     '#title' => t('Links open in new browser'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_links_target_new_window', 0),
+    '#default_value' => $config->get('biblio_links_target_new_window'),
     '#description' => t('This causes related URLs to open in a new browser window'),
   );
 
@@ -436,7 +436,7 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Hyperlink titles using supplied URL if available'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_link_title_url', 0),
+    '#default_value' => $config->get('biblio_link_title_url'),
     '#description' => t('Selecting this links the titles to the supplied URL (if available) rather than the "node" view.'),
   );
   $form['links']['author'] = array(
@@ -449,20 +449,20 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Hyperlink author names'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_author_links', 1),
+    '#default_value' => $config->get('biblio_author_links'),
     '#description' => t('This creates a hyperlink on author names which, when clicked, will select entries which contain that author'),
   );
   $form['links']['author']['biblio_author_link_profile'] = array(
     '#type' => 'checkbox',
     '#title' => t('Hyperlink author names to author profile page'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_author_link_profile', 0),
+    '#default_value' => $config->get('biblio_author_link_profile'),
     '#description' => t('This creates a hyperlink on author names which, when clicked, will take the user to the authors profile page'),
   );
   $form['links']['author']['biblio_author_link_profile_path'] = array(
     '#type' => 'textfield',
     '#title' => t('Path to profile page'),
-    '#default_value' => variable_get('biblio_author_link_profile_path', 'user/[user:uid]'),
+    '#default_value' => $config->get('biblio_author_link_profile_path'),
     '#description' => t('Do not include a leading "/"'),
   );
 
@@ -485,29 +485,29 @@ function biblio_admin_settings() {
     '#title' => t('Allow users to override these settings on their "My account" page') ,
     '#return_value' => 1,
     '#description' => t('If this is selected, a form similar to this section will be available to the user when they edit their own account information.  This will allow them to override the global preferences set here.') ,
-    '#default_value' => variable_get('biblio_show_openurl_profile_form', '1'),
+    '#default_value' => $config->get('biblio_show_openurl_profile_form'),
   );
 
   $form['openurl']['biblio_baseopenurl'] = array(
     '#type' => 'textfield',
     '#title' => t('OpenURL Base URL'),
     '#size' => 95,
-    '#default_value' => variable_get('biblio_baseopenurl', ''),
+    '#default_value' => $config->get('biblio_baseopenurl'),
     '#description' => t('This sets your institution\'s base <a href="http://en.wikipedia.org/wiki/OpenURL">OpenURL</a> gateway, which is used to generate OpenURL links. To implement a "Universal" OpenURL system, try using OCLC\'s <a href="http://www.oclc.org/productworks/urlresolver.htm">OpenURL Resolver Registry</a> gateway: <a href="http://worldcatlibraries.org/registry/gateway">http://worldcatlibraries.org/registry/gateway</a>'),
   );
-  $sid = "Biblio:" . variable_get('site_name', 'Drupal');
+  $sid = "Biblio:" . config_get('system.core', 'site_name');
   $form['openurl']['biblio_openurl_sid'] = array(
     '#type' => 'textfield',
     '#title' => t('OpenURL Site ID'),
     '#size' => 95,
-    '#default_value' => variable_get('biblio_openurl_sid', $sid),
+    '#default_value' => $config->get('biblio_openurl_sid') ?: $sid,
     '#description' => t('This sets your institution\'s site name, some link resolvers will require a specific Site ID in order to process your requests.'),
   );
   $form['openurl']['biblio_openurlimage'] = array(
     '#type' => 'textfield',
     '#title' => t('OpenURL Image'),
     '#size' => 95,
-    '#default_value' => variable_get('biblio_openurlimage', ''),
+    '#default_value' => $config->get('biblio_openurlimage'),
     '#description' => t('Enter a path to your image here, this image will be used as button which when clicked will find the entry via the OpenURL link'),
   );
   // Add profile page settings... this is done in a fucntion so it can be reused elsewhere.
@@ -542,7 +542,7 @@ function biblio_admin_settings() {
     '#disabled' => $search_disabled,
     '#title' => t('Enable a search box on the biblio page.'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_search', 0),
+    '#default_value' => $config->get('biblio_search'),
     '#description' => t('Shows a search box on the biblio page that returns drupal search results in the biblio style.'),
   );
   $form['search']['biblio_search_button_text'] = array(
@@ -550,7 +550,7 @@ function biblio_admin_settings() {
     '#title' => t('Search button text'),
     '#disabled' => $search_disabled,
     '#size' => 95,
-    '#default_value' => variable_get('biblio_search_button_text', t('Biblio search')),
+    '#default_value' => $config->getTranslated('biblio_search_button_text'),
     '#description' => t('This allows you to customize the text on the search button, it defaults to "Biblio search".'),
   );
   $form['search']['biblio_index'] = array(
@@ -558,7 +558,7 @@ function biblio_admin_settings() {
     '#disabled' => $search_disabled,
     '#title' => t('Re-/Index a biblio node when creating or updating.'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_index', 0),
+    '#default_value' => $config->get('biblio_index'),
     '#description' => t('A biblio node must be indexed for the drupal search to know its content. You need to check this option if you want to search for a biblio node that you just created or updated. Otherwise you must wait for the cron job to reindex nodes.'),
   );
   $form['search']['biblio_search_form_filter'] = array(
@@ -566,7 +566,7 @@ function biblio_admin_settings() {
     '#disabled' => $search_disabled,
     '#title' => t('Allow search filters on search form.'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_search_form_filter', 1),
+    '#default_value' => $config->get('biblio_search_form_filter'),
     '#description' => t('Unchecking this box will remove search filters from the search form, but may improve performance on biblio search pages.'),
   );
   $form['sort'] = array(
@@ -581,7 +581,7 @@ function biblio_admin_settings() {
   $form['sort']['biblio_sort'] = array(
     '#type' => 'select',
     '#title' => t('Sort by'),
-    '#default_value' => variable_get('biblio_sort', 'year'),
+    '#default_value' => $config->get('biblio_sort'),
     '#options' => array(
       'author'  => t('Author'),
       'keyword' => t('Keyword'),
@@ -591,19 +591,18 @@ function biblio_admin_settings() {
     ),
     '#description' => t('This is the initial default sort.'),
   );
-  $stop_words = 'a,an,is,on,the';
   $form['sort']['biblio_stop_words'] = array(
     '#type' => 'textfield',
     '#title' => t('Words to remove from the beginning of titles prior to sorting'),
     '#size' => 60,
-    '#default_value' => variable_get('biblio_stop_words', $stop_words),
+    '#default_value' => $config->get('biblio_stop_words'),
     '#description' => t('A comma separated list of (case insensitive) words to strip from the title for sorting purposes.  NOTE: quotation and punctuation are stripped automatically.'),
   );
 
   $form['sort']['biblio_sort_tabs'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Show sort links'),
-    '#default_value' => variable_get('biblio_sort_tabs', array('author', 'title', 'type', 'year')),
+    '#default_value' => $config->get('biblio_sort_tabs'),
     '#options' => array(
       'author'  => t('Author'),
       'keyword' => t('Keyword  (<i>Warning: sorting by keyword may produce many duplicates due to the fact that an entry is listed for each keyword attached to it.</i>)'),
@@ -616,14 +615,14 @@ function biblio_admin_settings() {
   $form['sort']['biblio_sort_tabs_style'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show sort links as "tabs"'),
-    '#default_value' => variable_get('biblio_sort_tabs_style', 0),
+    '#default_value' => $config->get('biblio_sort_tabs_style'),
     '#return_value' => 1,
     '#description' => t('This changes the sort links from text links to tabs'),
   );
   $form['sort']['biblio_order'] = array(
     '#type' => 'radios',
     '#title' => t('Order'),
-    '#default_value' => variable_get('biblio_order', 'DESC'),
+    '#default_value' => $config->get('biblio_order'),
     '#options' => array(
       'DESC' => t('Descending'),
       'ASC' => t('Ascending'),
@@ -642,21 +641,21 @@ function biblio_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('Text to display if no year of publication is available'),
     '#size' => 95,
-    '#default_value' => variable_get('biblio_no_year_text', t('Submitted')),
+    '#default_value' => $config->getTranslated('biblio_no_year_text'),
     '#description' => t('The text that is displayed when no date of publication is given or it is deliberately set to <b>9999</b>, it defaults to "Submitted".'),
   );
   $form['style']['biblio_inpress_year_text'] = array(
     '#type' => 'textfield',
     '#title' => t('Text to display if year of publication is set to 9998'),
     '#size' => 95,
-    '#default_value' => variable_get('biblio_inpress_year_text', t('In Press')),
+    '#default_value' => $config->getTranslated('biblio_inpress_year_text'),
     '#description' => t('The text that is displayed when the date of publication is deliberately set to <b>9998</b>, it defaults to "In Press".'),
   );
   if (module_exists('biblio_citeproc')) {
     $form['style']['biblio_citeproc_style'] = array(
       '#type' => 'select',
       '#title' => t('Style'),
-      '#default_value' => variable_get('biblio_citeproc_style', 'ieee.csl'),
+      '#default_value' => $config->get('biblio_citeproc_style'),
       '#options' => biblio_get_styles(),
       '#description' => t('Set the bibliographic style of the "list" view.'),
     );
@@ -665,7 +664,7 @@ function biblio_admin_settings() {
     $form['style']['biblio_style'] = array(
       '#type' => 'select',
       '#title' => t('Style'),
-      '#default_value' => variable_get('biblio_style', 'cse'),
+      '#default_value' => $config->get('biblio_style'),
       '#options' => biblio_get_styles(),
       '#description' => t('Set the bibliographic style of the "list" view.'),
     );
@@ -673,7 +672,7 @@ function biblio_admin_settings() {
   $form['style']['biblio_node_layout'] = array(
     '#type' => 'radios',
     '#title' => t('Node Layout'),
-    '#default_value' => variable_get('biblio_node_layout', 'tabular'),
+    '#default_value' => $config->get('biblio_node_layout'),
     '#options' => array(
       'orig'    => t('Original'),
       'ft'      => t('Only Fulltext if available'),
@@ -685,7 +684,7 @@ function biblio_admin_settings() {
   $form['style']['biblio_annotations'] = array(
     '#type' => 'select',
     '#title' => t('Annotations'),
-    '#default_value' => variable_get('biblio_annotations', 'none'),
+    '#default_value' => $config->get('biblio_annotations'),
     '#options' => array(
       'none'           => t('none'),
       'biblio_notes'   => t('notes'),
@@ -714,13 +713,13 @@ function biblio_admin_settings() {
     '#type' => 'checkbox',
     '#title' => t('Allow RSS feeds of new biblio entries'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_rss', 0),
+    '#default_value' => $config->get('biblio_rss'),
     '#description' => t('This will create an rss feed of the 10 most recent biblio entries. It will be available at /biblio/rss.xml'),
   );
   $form['syndication']['biblio_rss_number_of_entries'] = array(
     '#type' => 'textfield',
     '#title' => t('Number of items in the RSS feed.'),
-    '#default_value' => variable_get('biblio_rss_number_of_entries', 10),
+    '#default_value' => $config->get('biblio_rss_number_of_entries'),
     '#size' => 6,
     '#maxlength' => 6,
     '#description' => t('Limits the number of items in the /biblio/rss.xml feed to this number.'),
@@ -738,13 +737,6 @@ function biblio_admin_settings() {
  * Form handler for biblio_admin_settings.
  */
 function biblio_admin_settings_form_submit($form, &$form_state) {
-  // If ($form_state['values']['biblio_keyword_freetagging'] && $form_state['values']['biblio_keyword_vocabulary']) {
-  //    if ($vocabulary = taxonomy_vocabulary_load(variable_get('biblio_keyword_vocabulary', 0))) {
-  //      $vocabulary = (array) $vocabulary;
-  //      $vocabulary['nodes']['biblio'] = 1;
-  //      taxonomy_save_vocabulary($vocabulary);
-  //    }
-  //  }
   if (($form['#biblio_base'] != $form_state['values']['biblio_base']) ||
       ($form['biblio_profile']['#biblio_show_profile'] != $form_state['values']['biblio_show_profile']) ||
       ($form['biblio_profile']['#biblio_my_pubs_menu'] != $form_state['values']['biblio_my_pubs_menu'])) {
@@ -983,6 +975,8 @@ function biblio_admin_types_edit_form($form, &$form_state, $tid = 0) {
  * Form handler for biblio_admin_types_edit_form.
  */
 function biblio_admin_types_edit_form_submit($form, &$form_state) {
+  $config = config('biblio.settings');
+
   if ($form_state['triggering_element']['#value'] == t('Change Publication Type')) {
     $form_state['rebuild'] = TRUE;
     $form_state['pub_type'] = $form_state['values']['pub_type'];
@@ -1006,7 +1000,7 @@ function biblio_admin_types_edit_form_submit($form, &$form_state) {
   }
 
   $hide_other_fields = isset($form_state['values']['hide_other_fields']) ? $form_state['values']['hide_other_fields'] : 0;
-  variable_set('biblio_hide_other_fields', $hide_other_fields);
+  $config->set('biblio_hide_other_fields', $hide_other_fields);
 
   // Save other field data.
   foreach ($form_state['values']['biblio_tabs'] as $fid => $values) {
@@ -1042,8 +1036,8 @@ function biblio_admin_types_edit_form_submit($form, &$form_state) {
       }
       // We just changed a default value, so create a new entry in biblio_field_type_data.
       if ($update == $fid && $link['tid']) {
-        $new_ftdid = variable_get('biblio_last_ftdid', 100);
-        variable_set('biblio_last_ftdid', $new_ftdid + 1);
+        $new_ftdid = $config->get('biblio_last_ftdid');
+        $config->set('biblio_last_ftdid', $new_ftdid + 1);
         $val['ftdid'] = $new_ftdid;
         $link['ftdid'] = $new_ftdid;
         $link['cust_tdid'] = $new_ftdid;
@@ -1494,14 +1488,6 @@ function biblio_admin_field_mapper_form_submit($form, $form_state) {
   if ($form_state['values']['fileformat_export']) {
     biblio_set_map('export_map', $form_state['values']['fileformat'], $export_map);
   }
-
-  // @code
-  // elseif ($form_state['values']['op'] == t('Add')) {
-  //   $names = biblio_get_map('type_names', $form_state['values']['fileformat']);
-  //   $names[$form_state['values']['type_name']] = $form_state['values']['type_desc'];
-  //   variable_set('biblio_'.$form_state['values']['fileformat'] .'_type_names', $names);
-  // }
-  // @endcode
 }
 
 /**
@@ -1590,15 +1576,16 @@ function biblio_admin_types_add_form($form, &$form_state) {
  * @param $form_state
  */
 function biblio_admin_types_add_form_submit($form, &$form_state) {
+  $config = config('biblio.settings');
   $values['name'] = $form_state['values']['name'];
   $values['description'] = $form_state['values']['description'];
-  $values['tid'] = variable_get('biblio_max_user_tid', '999') + 1;
+  $values['tid'] = $config->get('biblio_max_user_tid') + 1;
 
   db_insert('biblio_types')
     ->fields($values)
     ->execute();
 
-  variable_set('biblio_max_user_tid', $values['tid']);
+  $config->set('biblio_max_user_tid', $values['tid']);
   $result = db_query('SELECT * FROM {biblio_field_type} WHERE tid=0', array(), array('fetch' => PDO::FETCH_ASSOC));
   foreach ($result as $row) {
     $row['tid'] = $values['tid'];
@@ -1770,12 +1757,13 @@ function biblio_admin_types_reset_form_submit($form, & $form_state) {
 }
 
 /**
- * This functin is used by both the admin/config/content/biblio page and user profile page
+ * This function is used by both the admin/config/content/biblio page and user profile page
  * - if $user is set, then it is being called from the user profile page.
  */
 function _biblio_get_user_profile_form($profile_user = FALSE) {
+  $config = config('biblio.settings');
   $form = array();
-  $allow_edit = variable_get('biblio_show_user_profile_form', '1');
+  $allow_edit = $config->get('biblio_show_user_profile_form');
   $allow_edit = $allow_edit || user_access('administer biblio');
 
   if (!$profile_user) {
@@ -1784,7 +1772,7 @@ function _biblio_get_user_profile_form($profile_user = FALSE) {
       '#title' => t('Allow users to override these settings on their "My account" page') ,
       '#return_value' => 1,
       '#description' => t('If this is selected, a form similar to this section will be available to the user when they edit their own account information.  This will allow them to override the global preferences set here.') ,
-      '#default_value' => variable_get('biblio_show_user_profile_form', '1'),
+      '#default_value' => $config->get('biblio_show_user_profile_form'),
     );
   }
   $form['biblio_show_profile'] = array(
@@ -1795,10 +1783,10 @@ function _biblio_get_user_profile_form($profile_user = FALSE) {
     '#description' => ($profile_user) ? t('Selecting this will create a listing of your publications on your profile page') : t('This sets the site wide default, users may change this in their profile'),
   );
   if ($profile_user) {
-    $form['biblio_show_profile']['#default_value'] = (isset($profile_user->data['biblio_show_profile'])) ? $profile_user->data['biblio_show_profile'] : variable_get('biblio_show_profile', '0');
+    $form['biblio_show_profile']['#default_value'] = (isset($profile_user->data['biblio_show_profile'])) ? $profile_user->data['biblio_show_profile'] : $config->get('biblio_show_profile');
   }
   else {
-    $form['biblio_show_profile']['#default_value'] = variable_get('biblio_show_profile', '0');
+    $form['biblio_show_profile']['#default_value'] = $config->get('biblio_show_profile');
   }
   $form['#biblio_show_profile'] = $form['biblio_show_profile']['#default_value'];
   $form['biblio_my_pubs_menu'] = array(
@@ -1809,10 +1797,10 @@ function _biblio_get_user_profile_form($profile_user = FALSE) {
     '#description' => '',
   );
   if ($profile_user) {
-    $form['biblio_my_pubs_menu']['#default_value'] = ((isset($profile_user->data['biblio_my_pubs_menu'])) ? $profile_user->data['biblio_my_pubs_menu'] : variable_get('biblio_my_pubs_menu', '0'));
+    $form['biblio_my_pubs_menu']['#default_value'] = ((isset($profile_user->data['biblio_my_pubs_menu'])) ? $profile_user->data['biblio_my_pubs_menu'] : $config->get('biblio_my_pubs_menu'));
   }
   else {
-    $form['biblio_my_pubs_menu']['#default_value'] = variable_get('biblio_my_pubs_menu', '0');
+    $form['biblio_my_pubs_menu']['#default_value'] = $config->get('biblio_my_pubs_menu');
   }
   $form['#biblio_my_pubs_menu'] = $form['biblio_my_pubs_menu']['#default_value'];
 
@@ -1921,7 +1909,7 @@ function _biblio_get_user_openurl_form($user) {
     '#default_value' => !empty($user->data['biblio_baseopenurl']) ? $user->data['biblio_baseopenurl'] : '',
     '#description' => t('This sets your base <a href="http://en.wikipedia.org/wiki/OpenURL">OpenURL</a> gateway, which is used to generate OpenURL links. To implement a "Universal" OpenURL system, try using OCLC\'s <a href="http://www.oclc.org/productworks/urlresolver.htm">OpenURL Resolver Registry</a> gateway: <a href="http://worldcatlibraries.org/registry/gateway">http://worldcatlibraries.org/registry/gateway</a>'),
   );
-  $sid = "Biblio:" . variable_get('site_name', 'Drupal');
+  $sid = "Biblio:" . config_get('system.core', 'site_name');
   $form['openurl']['biblio_openurl_sid'] = array(
     '#type' => 'textfield',
     '#title' => t('OpenURL Site ID'),
@@ -2104,7 +2092,7 @@ function biblio_admin_author_types_form_submit($form, &$form_state) {
  * @param $type_id
  */
 function biblio_admin_author_type_delete_confirm($form, &$form_state, $type_id) {
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
   $type_data = db_query('SELECT * FROM {biblio_contributor_type_data} bctd WHERE bctd.auth_type = :tid ', array(':tid' => $type_id))->fetchObject();
   $form['auth_type'] = array(
     '#type' => 'value',
@@ -2151,15 +2139,13 @@ function biblio_admin_author_edit_form($form, &$form_state, $author_id) {
   if (!isset($form_state['biblio_add_merge_author'])) {
     $form_state['biblio_add_merge_author'] = array();
   }
-  $base = variable_get('biblio_base', 'biblio');
 
   $author = db_query('SELECT * FROM {biblio_contributor_data} b WHERE b.cid = :aid ', array(':aid' => $author_id))->fetchObject();
   if (!$author) {
     drupal_not_found();
     return;
   }
-  $base = variable_get('biblio_base', 'biblio');
-  $menu = menu_get_active_title();
+  $base = config_get('biblio.settings', 'biblio_base');
   $path = (strpos($_GET['q'], 'config')) ? 'admin/config/content/biblio/author/' : $base . '/authors/';
 
   // $form['#tree'] = TRUE;.
@@ -2274,7 +2260,6 @@ function biblio_admin_author_edit_form($form, &$form_state, $author_id) {
 
   $linked = biblio_get_linked_contributors($author->cid);
 
-  $radio_options = array('link' => '', 'merge' => '');
   $candidate = FALSE;
   $candidates = array();
 
@@ -2624,7 +2609,7 @@ function biblio_admin_orphans_form($form, &$form_state) {
   module_load_include('inc', 'biblio', 'includes/biblio.contributors');
   $orphans = $options = $names = array();
 
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
 
   $orphans = biblio_get_orphan_authors();
 
@@ -2715,7 +2700,7 @@ function biblio_admin_orphans_form_submit($form, &$form_state) {
 function biblio_admin_keyword_orphans_form($form, $form_state) {
   $orphans = $keywords = $options = array();
 
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
 
   $header = array(
     'keyword' => t('Keyword'),
@@ -2814,7 +2799,7 @@ function biblio_admin_keyword_edit_form($form, &$form_state, $keyword_id) {
 
   $keyword = db_query('SELECT * FROM {biblio_keyword_data} bkd WHERE bkd.kid = :kid ', array(':kid' => $keyword_id))->fetchObject();
 
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
   // $path = (strpos($_GET['q'], 'config')) ? 'admin/config/content/biblio/keywords' : $base . '/keywords';.
   if (isset($_GET['destination'])) {
     $destination = $_GET['destination'];
@@ -2971,7 +2956,7 @@ function biblio_add_merge_keyword($form, &$form_state) {
  * @param $keyword_id
  */
 function biblio_admin_keyword_delete_confirm($form, &$form_state, $keyword_id) {
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
   $keyword = db_query('SELECT * FROM {biblio_keyword_data} bkd WHERE bkd.kid = :kid ', array(':kid' => $keyword_id))->fetchObject();
   $form['kid'] = array(
     '#type' => 'value',
@@ -2993,7 +2978,7 @@ function biblio_admin_keyword_delete_confirm($form, &$form_state, $keyword_id) {
  * @param $form_state
  */
 function biblio_admin_keyword_delete_confirm_submit($form, &$form_state) {
-  $base = variable_get('biblio_base', 'biblio');
+  $base = config_get('biblio.settings', 'biblio_base');
   module_load_include('inc', 'biblio', 'includes/biblio.keywords');
   biblio_delete_keyword($form_state['values']['kid']);
   $form_state['redirect'] = $base . '/keywords';
@@ -3004,6 +2989,8 @@ function biblio_admin_keyword_delete_confirm_submit($form, &$form_state) {
  * @param $form_state
  */
 function biblio_admin_keyword_edit_form_submit($form, &$form_state) {
+  $base = config_get('biblio.settings', 'biblio_base');
+
   switch ($form_state['values']['op']) {
 
     case t('Save'):
@@ -3024,13 +3011,11 @@ function biblio_admin_keyword_edit_form_submit($form, &$form_state) {
       break;
 
     case t('Delete'):
-      $base = variable_get('biblio_base', 'biblio');
       unset($_GET['destination']);
       $form_state['redirect'] = "$base/keyword/" . $form_state['values']['kid'] . '/delete';
       break;
 
     case t('Cancel'):
-      $base = variable_get('biblio_base', 'biblio');
       $form_state['redirect'] = $base . '/keywords';
       break;
   }

@@ -77,7 +77,7 @@ class BiblioEntrezPubmedArticle {
    */
   public function getBiblio() {
     if (empty($this->biblio)) {
-      if (variable_get('biblio_auto_citekey', 1)) {
+      if (config_get('biblio.settings', 'biblio_auto_citekey')) {
         $citekey = '';
       }
       else {

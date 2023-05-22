@@ -145,7 +145,7 @@ class BiblioKeywordWebTestCase extends BiblioWebTestCase {
     $keywords = array();
     $exploded = array();
     $words = array();
-    $sep = variable_get('biblio_keyword_sep', ',');
+    $sep = config_get('biblio.settings', 'biblio_keyword_sep');
     $wrong_sep = ($sep == ',') ? ';' : ',';
     for ($i = 0; $i < 4; $i++) {
       $words[] = $this->randomName();

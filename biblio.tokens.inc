@@ -9,7 +9,10 @@
  */
 function biblio_token_info() {
   $schema = backdrop_get_schema('biblio');
-  $fields = array_diff_key($schema['fields'], array('nid' => '', 'vid' => '', 'biblio_formats' => ''));
+  $fields = array();
+  if (isset($schema['fields'])) {
+    $fields = array_diff_key($schema['fields'], array('nid' => '', 'vid' => '', 'biblio_formats' => ''));
+  }
   $node_token['biblio'] = array(
     'name' => t('Biblio'),
     'description' => t('Tokens related to the Biblio content type.'),

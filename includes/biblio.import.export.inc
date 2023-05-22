@@ -60,6 +60,7 @@ function _biblio_admin_build_user_select($my_uid) {
  */
 function biblio_import_form($form, &$form_state) {
   global $user;
+  $config = config('biblio.settings');
   $msg = '';
   $biblio_vocabs = array();
 
@@ -127,9 +128,9 @@ function biblio_import_form($form, &$form_state) {
     );
     if (count($biblio_vocabs)) {
       $vocabularies = module_invoke('taxonomy', 'get_vocabularies', 'biblio');
-      if (variable_get('biblio_keyword_freetagging', 0)) {
-        $freetag_vocab = $vocabularies[variable_get('biblio_keyword_vocabulary', 0)];
-        unset($vocabularies[variable_get('biblio_keyword_vocabulary', 0)]);
+      if ($config->get('biblio_keyword_freetagging')) {
+        $freetag_vocab = $vocabularies[$config->get('biblio_keyword_vocabulary')];
+        unset($vocabularies[$config->get('biblio_keyword_vocabulary')]);
         $msg = t('<b>NOTE:</b> Keyword "free tagging" is turned on, consequently all incomming keywords will be added to the <b>@name</b> vocabulary as specified in the "Keyword" section of the !url page.', array('@name' => $freetag_vocab->name, '!url' => l(t('admin/config/content/biblio'), 'admin/config/content/biblio')));
       }
       else {
@@ -160,8 +161,8 @@ function biblio_import_form($form, &$form_state) {
           '#type' => 'checkbox',
           '#title' => t('Copy these terms to the biblio keyword database'),
           '#return_value' => 1,
-          '#default_value' => variable_get('biblio_copy_taxo_terms_to_keywords', 0),
-          '#description' => t('If this option is selected, the selected taxonomy terms will be copied to the ' . check_plain(variable_get('biblio_base_title', 'Biblio')) . ' keyword database and be displayed as keywords (as well as taxonomy terms) for this entry.'),
+          '#default_value' => $config->get('biblio_copy_taxo_terms_to_keywords'),
+          '#description' => t('If this option is selected, the selected taxonomy terms will be copied to the ' . check_plain($config->get('biblio_base_title')) . ' keyword database and be displayed as keywords (as well as taxonomy terms) for this entry.'),
         );
       }
     }
@@ -281,7 +282,7 @@ function biblio_import_form_submit($form, & $form_state) {
         );
         batch_set($batch_op);
 
-        $base = variable_get('biblio_base', 'biblio');
+        $base = config_get('biblio.settings', 'biblio_base');
         batch_process("$base/import");
 
       }
@@ -707,21 +708,14 @@ function biblio_save_node_validate($node) {
  *
  */
 function biblio_csv_export_2($result, $bfields) {
-  // @code
-  // $query_biblio_fields = 'SELECT name, title FROM {biblio_fields}';
-  // $res_biblio_fields = db_query($query_biblio_fields);
-  // while ($rec = db_fetch_object($res_biblio_fields)) {
-  //   $bfields[$rec->name] = $rec->title;
-  // }
-  // @endcode
-
+  $config = config('biblio.settings');
   $bfields = biblio_get_db_fields('all');
   $query_biblio_types = 'SELECT tid, name FROM {biblio_types}';
   $res_biblio_types = db_query($query_biblio_types);
   foreach ($res_biblio_types as $rec) {
     $btypes[$rec->tid] = $rec->name;
   }
-  switch (variable_get('biblio_csv_field_sep', 'tab')) {
+  switch ($config->get('biblio_csv_field_sep')) {
     case 'tab':
       $filedsep = "\t";
       break;
@@ -730,7 +724,7 @@ function biblio_csv_export_2($result, $bfields) {
       $filedsep = ',';
       break;
   }
-  switch (variable_get('biblio_csv_text_sep', 'dquote')) {
+  switch ($config->get('biblio_csv_text_sep')) {
     case 'dquote':
       $textsep = '"';
       break;
@@ -740,8 +734,8 @@ function biblio_csv_export_2($result, $bfields) {
       break;
   }
   // Or 'col_name'.
-  $label = (variable_get('biblio_csv_col_head', 'label') == 'label' ? 1 : 0);
-  $linebreak = variable_get('biblio_linebreak_exp', 1);
+  $label = ($config->get('biblio_csv_col_head') == 'label' ? 1 : 0);
+  $linebreak = $config->get('biblio_linebreak_exp');
   foreach ($result as $rec) {
     $node_id = $rec->nid;
     // There is no "label" for "type".

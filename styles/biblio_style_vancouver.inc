@@ -82,7 +82,7 @@ function biblio_style_vancouver($node) {
   // if (empty($authors)) $authors = theme('biblio_authors', $node->biblio_contributors->get_category(5), 'mla', 5, $inline);  // if no authors substitute corp author if available
   // if (empty($authors)) $authors = '[' . t('Anonymous') . ']';  // use anonymous if we still have nothing.
   // $output .= '<span class="biblio-authors">' . $authors . "</span>.&nbsp; \n";.
-  if (!empty($node->biblio_citekey)&&(variable_get('biblio_display_citation_key', 0))) {
+  if (!empty($node->biblio_citekey) && (config_get('biblio.settings', 'biblio_display_citation_key'))) {
     $output .= '[' . check_plain($node->biblio_citekey) . '] ';
   }
 

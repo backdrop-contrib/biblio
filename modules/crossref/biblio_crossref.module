@@ -9,6 +9,7 @@
  */
 function biblio_crossref_form_biblio_node_form_alter(&$form, &$form_state) {
   global $user;
+  $config = config('biblio.settings');
   if (phpversion() > 5 && !$form_state['submitted'] && !isset($form['#node']->nid)) {
     $form['biblio_doi_lookup'] = array(
       '#type' => 'fieldset',
@@ -17,9 +18,9 @@ function biblio_crossref_form_biblio_node_form_alter(&$form, &$form_state) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
-    $have_pid = variable_get('biblio_crossref_pid', '');
+    $have_pid = $config->get('biblio_crossref_pid');
     $user_pid = (isset($user->data['biblio_crossref_pid']) && !empty($user->data['biblio_crossref_pid'])) ? $user->data['biblio_crossref_pid'] : '';
-    if (variable_get('biblio_show_crossref_profile_form', '1') && !empty($user_pid)) {
+    if ($config->get('biblio_show_crossref_profile_form') && !empty($user_pid)) {
       $have_pid = $user_pid;
     }
     if (empty($have_pid)) {
@@ -59,13 +60,13 @@ function biblio_crossref_form_biblio_node_form_alter(&$form, &$form_state) {
  */
 function biblio_crossref_form_biblio_node_form_submit($form, &$form_state) {
   global $user;
-  $node_data = array();
+  $config = config('biblio.settings');
   if (strlen($doi = $form_state['values']['doi_data'])) {
     if (($doi_start = strpos($form_state['values']['doi_data'], '10.')) !== FALSE) {
       if (!($dup = biblio_crossref_check_doi($doi))) {
-        $crossref_pid = variable_get('biblio_crossref_pid', '');
+        $crossref_pid = $config->get('biblio_crossref_pid');
         $user_pid = (isset($user->data['biblio_crossref_pid']) && !empty($user->data['biblio_crossref_pid'])) ? $user->data['biblio_crossref_pid'] : '';
-        if (variable_get('biblio_show_crossref_profile_form', '1') && !empty($user_pid)) {
+        if ($config->get('biblio_show_crossref_profile_form') && !empty($user_pid)) {
           $crossref_pid = $user_pid;
         }
 
@@ -128,7 +129,7 @@ function biblio_crossref_biblio_mapper_options() {
  *
  */
 function biblio_crossref_biblio_lookup_link($node) {
-  $show_link = variable_get('biblio_lookup_links', array('crossref' => TRUE));
+  $show_link = config_get('biblio.settings', 'biblio_lookup_links') ?: array('crossref' => TRUE);
   if (empty($show_link['crossref']) || !isset($node) || (!isset($node->biblio_crossref_id) && empty($node->biblio_doi))) {
     return;
   }

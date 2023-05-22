@@ -51,7 +51,7 @@ class biblio_handler_field_export_link extends views_handler_field {
   public function render($values) {
     if (user_access('show export links')) {
       $format = $this->definition['format'];
-      $base = variable_get('biblio_base', 'biblio');
+      $base = config_get('biblio.settings', 'biblio_base');
       $nid = $this->get_value($values, 'nid');
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = "$base/export/$format/$nid";

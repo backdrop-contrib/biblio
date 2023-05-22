@@ -311,7 +311,7 @@ function biblio_get_orphan_author_ids() {
  * @param $force
  */
 function biblio_delete_orphan_authors($force = FALSE) {
-  if (variable_get('biblio_auto_orphaned_author_delete', 0) || $force) {
+  if (config_get('biblio.settings', 'biblio_auto_orphaned_author_delete') || $force) {
     $orphans = biblio_get_orphan_author_ids();
     if (!empty($orphans)) {
       db_delete('biblio_contributor_data')

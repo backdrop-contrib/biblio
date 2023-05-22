@@ -14,7 +14,7 @@ module_load_include('inc', 'biblio', 'biblio.pages');
  */
 function theme_biblio_openurl($variables) {
   $open_url = $variables['openURL'];
-  $openurl_image = variable_get('biblio_openurlimage', '');
+  $openurl_image = config_get('biblio.settings', 'biblio_openurlimage');
   if ($openurl_image != '') {
     return '<div class="biblio-openurl-image"><a href="' . $open_url . '" target="_blank"><img border="0" src="' . $openurl_image . '"/></a></div>';
   }
@@ -30,6 +30,7 @@ function theme_biblio_openurl($variables) {
  */
 function biblio_openurl($node) {
   global $user;
+  $config = config('biblio.settings');
   $open_url = '';
   // Copyright:          Matthias Steffens <mailto:refbase@extracts.de> and the file's
   //                     original author.
@@ -39,14 +40,15 @@ function biblio_openurl($node) {
   //  global $hostInstitutionAbbrevName;.
   $open_url_resolver = !empty($user->data['biblio_baseopenurl']) ? $user->data['biblio_baseopenurl'] : '';
   if (empty($open_url_resolver)) {
-    $open_url_resolver = variable_get('biblio_baseopenurl', '');
+    $open_url_resolver = $config->get('biblio_baseopenurl');
   }
   if (!empty($open_url_resolver)) {
     $co = biblio_contextObject($node);
 
-    $sid = "biblio:" . variable_get('site_name', 'Drupal');
+    $sid = "biblio:" . config_get('system.core', 'site_name');
     $user_sid = !empty($user->data['biblio_openurl_sid']) ? $user->data['biblio_openurl_sid'] : '';
-    $co["sid"] = !empty($user_sid) ? $user_sid : variable_get('biblio_openurl_sid', $sid);
+    $open_url_sid = $config->get('biblio_openurl_sid') ?: $sid;
+    $co["sid"] = !empty($user_sid) ? $user_sid : $open_url_sid;
 
     $open_url = $open_url_resolver;
     if (!preg_match("/\?/", $open_url_resolver)) {
@@ -80,20 +82,21 @@ function biblio_openurl($node) {
  */
 function theme_biblio_long($variables) {
   $output = '';
+  $config = config('biblio.settings');
   $node = $variables['node'];
   if (module_exists('popups')) {
     popups_add_popups();
   }
 
   $output .= filter_xss($node->biblio_coins, array('span'));
-  $layout = variable_get('biblio_node_layout', 'orig');
+  $layout = $config->get('biblio_node_layout');
 
   // Check body value.
   $has_body = !empty($node->body);
 
-  if (variable_get('biblio_node_layout', 'orig') == 'ft' && $has_body && user_access('view full text')) {
+  if ($config->get('biblio_node_layout') == 'ft' && $has_body && user_access('view full text')) {
     $output .= '<div class="biblio-head">' . theme('biblio_style', $variables) . '</div>';
-    $annotation_field = variable_get('biblio_annotations', 'none');
+    $annotation_field = $config->get('biblio_annotations');
     if ($annotation_field != 'none' && $node->$annotation_field) {
       $output .= '<div class="biblio-annotation">';
       $output .= filter_xss($node->$annotation_field, biblio_get_allowed_tags());
@@ -112,7 +115,7 @@ function theme_biblio_long($variables) {
     }
   }
   $authors = implode('; ', (array) $authors);
-  $openurl_base = variable_get('biblio_baseopenurl', '');
+  $openurl_base = $config->get('biblio_baseopenurl');
   if ($openurl_base) {
     $output .= theme('biblio_openurl', array('openURL' => biblio_openurl($node)));
   }
@@ -165,7 +168,7 @@ function theme_biblio_long($variables) {
     $output .= '<h3>' . t("Other Number") . ':</h3> ' . check_plain($node->biblio_other_number) . "\n";
   }
   if ($node->biblio_url) {
-    $options = variable_get('biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
+    $options = $config->get('biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
     $output .= '<h3>' . t("URL") . ':</h3>' . l($node->biblio_url, $node->biblio_url, $options) . "\n";
   }
   if (!empty($node->biblio_keywords)) {
@@ -248,7 +251,7 @@ function theme_biblio_tabular($variables) {
     array('data' => $node->biblio_type_name),
   );
 
-  $options = variable_get('biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
+  $options = config_get('biblio.settings', 'biblio_links_target_new_window') ? array('attributes' => array('target' => '_blank')) : array();
 
   $doi = '';
   if (!empty($node->biblio_doi)) {
@@ -498,8 +501,7 @@ function theme_biblio_format_authors($variables) {
   }
   list($alnum, $alpha, $cntrl, $dash, $digit, $graph, $lower,
        $print, $punct, $space, $upper, $word, $patternModifiers) = _biblio_get_regex_patterns();
-  $base = variable_get('biblio_base', 'biblio');
-  $author_links = variable_get('biblio_author_links', 1);
+  $author_links = config_get('biblio.settings', 'biblio_author_links');
 
   // Check how many authors we have to deal with.
   $authorCount = count($contributors);
@@ -659,12 +661,13 @@ function theme_biblio_format_authors($variables) {
  *
  */
 function theme_biblio_author_link($variables) {
-  $base = variable_get('biblio_base', 'biblio');
+  $config = config('biblio.settings');
+  $base = $config->get('biblio_base');
   $author = $variables['author'];
   $options = isset($variables['options']) ? $variables['options'] : array();
 
-  $link_to_profile = variable_get('biblio_author_link_profile', 0);
-  $link_to_profile_path = variable_get('biblio_author_link_profile_path', 'user/[user:uid]');
+  $link_to_profile = $config->get('biblio_author_link_profile');
+  $link_to_profile_path = $config->get('biblio_author_link_profile_path');
 
   $uri = drupal_parse_url(request_uri());
   $uri = array_merge($uri, $options);
@@ -676,7 +679,7 @@ function theme_biblio_author_link($variables) {
   if (isset($author['drupal_uid']) && $author['drupal_uid'] > 0) {
     $uri['attributes'] += array('class' => array('biblio-local-author'));
   }
-  if (variable_get('biblio_links_target_new_window', NULL)) {
+  if ($config->get('biblio_links_target_new_window')) {
     $uri['attributes'] += array('target' => '_blank');
     $uri['html'] = TRUE;
   }
@@ -685,11 +688,11 @@ function theme_biblio_author_link($variables) {
     $data['user'] = user_load($author['drupal_uid']);
     $path = token_replace($link_to_profile_path, $data);
     $alias = drupal_get_path_alias($path);
-    $path_profile = variable_get('biblio_show_profile', '0') ? "$path/$base" : $alias;
+    $path_profile = $config->get('biblio_show_profile') ? "$path/$base" : $alias;
     return l(trim($author['name']), $path_profile, $uri);
   }
   else {
-    $uri['path'] = variable_get('biblio_base', 'biblio');
+    $uri['path'] = $config->get('biblio_base');
     $uri['query']['f']['author'] = $author['cid'];
     return l(trim($author['name']), $uri['path'], $uri);
   }
@@ -828,6 +831,7 @@ function theme_biblio_style($variables) {
 function theme_biblio_entry($variables) {
   $node       = $variables['node'];
   $style_name = $variables['style_name'];
+  $config = config('biblio.settings');
 
   $output = "\n" . '<div class="biblio-entry">' . "\n";
   $output .= '<div class="biblio-style-' . $style_name . '">' . "\n";
@@ -847,20 +851,19 @@ function theme_biblio_entry($variables) {
   // }
   // @endcode
 
-  $annotation_field = variable_get('biblio_annotations', 'none');
+  $annotation_field = $config->get('biblio_annotations');
   if ($annotation_field != 'none' && $node->$annotation_field) {
     $output .= '<div class="biblio-annotation">';
     $output .= filter_xss($node->$annotation_field, biblio_get_allowed_tags());
     $output .= '</div>';
   }
-  $openurl_base = variable_get('biblio_baseopenurl', '');
+  $openurl_base = $config->get('biblio_baseopenurl');
 
   if ($openurl_base) {
     $output .= theme('biblio_openurl', array('openURL' => biblio_openurl($node)));
   }
 
   if (biblio_access('export')) {
-    $base = variable_get('biblio_base', 'biblio');
     $output .= theme('biblio_export_links', array('node' => $node));
   }
 
@@ -999,7 +1002,7 @@ function theme_biblio_download_links($variables) {
         if (module_exists('filefield_paths')) {
           $alias = drupal_get_path_alias('filefield_paths/alias/' . $item['fid']);
         }
-        $link_type = variable_get('biblio_file_link_type', 'text');
+        $link_type = config_get('biblio.settings', 'biblio_file_link_type');
         if ($link_type == 'icon') {
           $url = file_create_url($item['uri']);
           $icon = theme('file_icon', array('file' => (object) $item));
@@ -1050,7 +1053,7 @@ function theme_biblio_export_links($variables) {
   $output = '';
 
   if (biblio_access('export')) {
-    $show_link = variable_get('biblio_lookup_links', array('google' => TRUE));
+    $show_link = config_get('biblio.settings', 'biblio_lookup_links') ?: array('google' => TRUE);
     $lookup_links = module_invoke_all('biblio_lookup_link', $node);
     if ($show_link['google'] && !empty($node)) {
       $lookup_links['biblio_google_scholar'] = theme('google_scholar_link', array('node' => $node));
@@ -1098,7 +1101,7 @@ function theme_google_scholar_link($variables) {
   $query['as_sdtp'] = 1;
 
   $attrs = array('title' => t("Click to search Google Scholar for this entry"));
-  if (variable_get('biblio_links_target_new_window', NULL)) {
+  if (config_get('biblio.settings', 'biblio_links_target_new_window')) {
     $attrs = array_merge($attrs, array('target ' => '_blank'));
   }
 
@@ -1301,8 +1304,9 @@ function theme_biblio_admin_author_edit_merge_table($variables) {
  *
  */
 function _biblio_keyword_links($keywords, $base = 'biblio') {
+  $config = config('biblio.settings');
   $uri = drupal_parse_url(request_uri());
-  $uri['path'] = variable_get('biblio_base', 'biblio');;
+  $uri['path'] = $config->get('biblio_base');
   $uri['attributes'] = array('rel' => 'nofollow');
   $html = "";
   if (!is_array($keywords)) {
@@ -1310,7 +1314,7 @@ function _biblio_keyword_links($keywords, $base = 'biblio') {
     $keywords = biblio_explode_keywords($keywords);
   }
 
-  $sep = variable_get('biblio_keyword_sep', ',');
+  $sep = $config->get('biblio_keyword_sep');
   foreach ($keywords as $kid => $keyword) {
     $uri['query']['f']['keyword'] = $kid;
     $linked_keywords[] = l(trim($keyword), $base, $uri);
@@ -1322,7 +1326,8 @@ function _biblio_keyword_links($keywords, $base = 'biblio') {
  *
  */
 function template_preprocess_biblio_sort_tabs(&$vars) {
-  $vars['tabs_style'] = variable_get('biblio_sort_tabs_style', 0);
+  $config = config('biblio.settings');
+  $vars['tabs_style'] = $config->get('biblio_sort_tabs_style');
 
   $uri = drupal_parse_url(request_uri());
   $uri['path'] = $_GET['q'];
@@ -1340,14 +1345,14 @@ function template_preprocess_biblio_sort_tabs(&$vars) {
     $sort = $uri['query']['s'];
   }
   else {
-    $sort = variable_get('biblio_sort', 'year');
+    $sort = $config->get('biblio_sort');
   }
 
   if (isset($uri['query']['o'])) {
     $order = strtolower($uri['query']['o']);
   }
   else {
-    $order = strtolower(variable_get('biblio_order', 'desc'));
+    $order = strtolower($config->get('biblio_order'));
   }
   // Flip it.
   $order = ($order == 'desc') ? 'asc' : 'desc';
@@ -1355,7 +1360,7 @@ function template_preprocess_biblio_sort_tabs(&$vars) {
   $order_arrow = ($order == 'asc') ? theme('image', array('path' => $path . '/misc/arrow-asc.png', 'alt' => '(Asc)')) :
                                      theme('image', array('path' => $path . '/misc/arrow-desc.png', 'alt' => '(Desc)'));
 
-  $sort_links = array_filter(variable_get('biblio_sort_tabs', array('author' => 'author', 'title' => 'title', 'type' => 'type', 'year' => 'year', 'keyword' => 'keyword')));
+  $sort_links = array_filter($config->get('biblio_sort_tabs'));
   ksort($sort_links);
 
   $links = array();
