@@ -2,23 +2,46 @@
 
 /**
  * @file
+ * Provides PubMed import and search to the Biblio module.
  */
+
+/**
+ * Implements hook_autoload_info().
+ */
+function biblio_pm_autoload_info() {
+  return array(
+    'BiblioEntrezClient' => 'includes/entrez_client.class.inc',
+    'BiblioEntrezPubmedArticle' => 'includes/entrez_pubmed_article.class.inc',
+  );
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function biblio_pm_config_info() {
+  $prefixes['biblio_pm.settings'] = array(
+    'label' => t('Biblio PubMed settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
 
 /**
  *
  */
 function biblio_pm_cron() {
-  if (variable_get('biblio_pm_auto_update', 0)) {
+  $config = config('biblio_pm.settings');
+  if ($config->get('biblio_pm_auto_update')) {
     module_load_include('inc', 'biblio', 'includes/biblio.import.export');
     // Defaults to once per hour.
-    $interval = variable_get('biblio_pm_update_interval', 3600);
+    $interval = $config->get('biblio_pm_update_interval');
     // Only update 100 at a time.
-    $count_limit = variable_get('biblio_pm_update_limit', 100);
+    $count_limit = $config->get('biblio_pm_update_limit');
     // Defaults to one month since last update.
-    $age       = variable_get('biblio_pm_age_limit', 2419200);
+    $age = $config->get('biblio_pm_age_limit');
     $age_limit = time() - $age;
 
-    if (time() >= variable_get('biblio_pm_update_next_execution', 0)) {
+    if (time() >= state_get('biblio_pm_update_next_execution', 0)) {
       $ids = array();
       $result = db_select('biblio_pubmed', 'bpm')
         ->fields('bpm', array('nid', 'biblio_pubmed_id'))
@@ -66,7 +89,7 @@ function biblio_pm_cron() {
                     );
       }
       watchdog('biblio_pm', $message, array(), WATCHDOG_INFO);
-      variable_set('biblio_pm_update_next_execution', time() + $interval);
+      state_set('biblio_pm_update_next_execution', time() + $interval);
     }
   }
 }
@@ -322,14 +345,13 @@ function _biblio_pm_create_node_from_xml($xml, $terms, $batch, $session_id) {
   module_load_include('php', 'biblio_pm', 'EntrezPubmedArticle');
   $nids = array();
   $dups = array();
-  $node = new stdClass();
   $data = new BiblioEntrezPubmedArticle();
 
   foreach ($xml->xpath('//PubmedArticle') as $article) {
     $node = $data->setArticle($article)->getBiblioAsObject();
     if (isset($node)) {
       $dup = biblio_pm_check_md5($node->biblio_pubmed_id, $node->biblio_pubmed_md5);
-      $action = variable_get('biblio_pm_dup_action', 'newrev');
+      $action = config_get('biblio_pm.settings', 'biblio_pm_dup_action');
       // Entry has be imported before, but may have changed.
       if ($dup < 0 && $action == 'newrev') {
         // Load the node in order to preserve all its data and merge the new

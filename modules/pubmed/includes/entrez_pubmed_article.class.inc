@@ -33,9 +33,9 @@ class BiblioEntrezPubmedArticle {
   }
 
   /**
-   * Returns the PubMed ID of the article.
+   * Returns a BiblioEntrezPubmedArticle.
    *
-   * @return int
+   * @return $this
    */
   public function setArticle(SimpleXMLElement $pubmedArticle) {
     $this->biblio = array();

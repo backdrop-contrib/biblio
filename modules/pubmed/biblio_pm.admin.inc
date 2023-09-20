@@ -10,9 +10,11 @@
  */
 function biblio_pm_settings_form() {
   $form = array();
+  $config = config('biblio_pm.settings');
 
   $form['pm_options'] = array(
     '#type' => 'fieldset',
+    '#config' => 'biblio_pm.settings',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#group'     => 'biblio_settings',
@@ -23,7 +25,7 @@ function biblio_pm_settings_form() {
   $form['pm_options']['biblio_pm_dup_action'] = array(
     '#type' => 'radios',
     '#title' => t('Actions'),
-    '#default_value' => variable_get('biblio_pm_dup_action', 'newrev'),
+    '#default_value' => $config->get('biblio_pm_dup_action'),
     '#options'  => array(
       'newrev'  => t('Accept and create a new revision of the existing node.'),
       'replace' => t('Accept and replace the existing node.'),
@@ -34,7 +36,7 @@ function biblio_pm_settings_form() {
     '#type' => 'checkbox',
     '#title' => t('Automatically check for updates via CRON'),
     '#return_value' => 1,
-    '#default_value' => variable_get('biblio_pm_auto_update', 0),
+    '#default_value' => $config->get('biblio_pm_auto_update'),
     '#description' => t('Entries which were orginally downloaded from PubMed will be periodically checked and updated if the source record has changed.'),
   );
   $form['pm_options']['pm_cron'] = array(
@@ -47,7 +49,7 @@ function biblio_pm_settings_form() {
   $form['pm_options']['pm_cron']['biblio_pm_update_interval'] = array(
     '#type' => 'select',
     '#title' => t('PubMed update frequency'),
-    '#default_value' => variable_get('biblio_pm_update_interval', 3600),
+    '#default_value' => $config->get('biblio_pm_update_interval'),
     '#options' => array(
       0 => t('Every CRON run'),
       3600 => t('Hourly'),
@@ -64,7 +66,7 @@ function biblio_pm_settings_form() {
   $form['pm_options']['pm_cron']['biblio_pm_update_limit'] = array(
     '#type' => 'select',
     '#title' => t('Number of items to check per CRON run'),
-    '#default_value' => variable_get('biblio_pm_update_limit', 100),
+    '#default_value' => $config->get('biblio_pm_update_limit'),
     '#options' => array(
       10 => 10,
       20 => 20,
@@ -82,7 +84,7 @@ function biblio_pm_settings_form() {
   $form['pm_options']['pm_cron']['biblio_pm_age_limit'] = array(
     '#type' => 'select',
     '#title' => t('Length of time to wait before re-checking for updates'),
-    '#default_value' => variable_get('biblio_pm_age_limit', 2419200),
+    '#default_value' => $config->get('biblio_pm_age_limit'),
     '#options' => array(
       86400 => t('1 Day'),
       604800 => t('1 Week'),

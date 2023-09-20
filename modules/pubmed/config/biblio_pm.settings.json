@@ -1,0 +1,8 @@
+{
+    "_config_name": "biblio_pm.settings",
+    "biblio_pm_dup_action": "newrev",
+    "biblio_pm_auto_update": 0,
+    "biblio_pm_update_interval": 3600,
+    "biblio_pm_update_limit": 100,
+    "biblio_pm_age_limit": 2419200
+}
