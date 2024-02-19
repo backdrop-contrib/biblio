@@ -21,9 +21,9 @@ Drupal Biblio module. It defines:
 
 ### Submodules
 
-None of the biblio submodules have been ported yet.
+Some of the biblio submodules have not been ported yet.
 
-If you are using any of the submodules and would like to see them available for
+If you are using unported submodules and would like to see them available for
 use in Backdrop, please let us know which you are using on this issue:
 https://github.com/backdrop-contrib/biblio/issues/10
 
@@ -41,13 +41,21 @@ To import bibliographic information from external soures, you will also need:
 - Job Scheduler (job_scheduler) -- required by Feeds, but not used directly
 
 
-Version Numbers
-----------------
+Version Numbers and Upgrading from Drupal 7
+--------------------------------------------
 
-The Drupal 7 module is on the 1.x branch.
+All recommended releases of the Drupal 7 module are on the 1.x branch.
 
-This Backdrop module is on the 2.x branch because the underlying structure of a
-bibliographic reference has changed sifnificantly: it is now a node.
+To upgrade to Backdrop: Make sure your Drupal 7 site is are on the latest
+1.x release (that is version 7.x-1.6 as of Feb 2024).
+
+The Backdrop module is on a 2.x branch because there were some sigificant
+chanes to the underlying structure of a bibliographic reference. It is now a
+node so that it can benefit from all the other features of modern Backdop nodes.
+
+Note: If your Drupal 7 site is on a 2.x-dev or 3.x-dev release, you may need to
+adapt the upgrade path for your needs. (If you do, please consider contributing
+those changes back, to help other people upgrading from the same branch.)
 
 
 Installation
