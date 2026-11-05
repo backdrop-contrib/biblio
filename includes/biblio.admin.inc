@@ -2804,8 +2804,8 @@ function biblio_admin_keyword_edit_form($form, &$form_state, $keyword_id) {
   if (isset($_GET['destination'])) {
     $destination = $_GET['destination'];
   }
-  if (!$destination && isset($form_state['complete form']['#action'])) {
-    $action = drupal_parse_url($form_state['complete form']['#action']);
+  if (!$destination && isset($form_state['complete_form']['#action'])) {
+    $action = drupal_parse_url($form_state['complete_form']['#action']);
     $destination = isset($action['query']['destination']) ? $action['query']['destination'] : NULL;
   }
   if (!$destination) {
